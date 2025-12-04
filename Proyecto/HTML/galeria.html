@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería Interactiva | Proyecto Web Interactivo</title>
+
+    <!-- Fuente Google: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="../CSS/estilos.css">
+    <script src="../JS/tema.js" defer></script>
+
+    <style>
+        /* Estilos específicos para galería.html */
+        .gallery-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .gallery-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1.5rem;
+            border-radius: 2rem;
+            border: 2px solid var(--color-primary-600);
+            background: transparent;
+            color: var(--color-primary-600);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dark .filter-btn {
+            border-color: var(--color-primary-400);
+            color: var(--color-primary-400);
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--color-primary-600);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .dark .filter-btn:hover,
+        .dark .filter-btn.active {
+            background: var(--color-primary-400);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 1rem;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            aspect-ratio: 4/3;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: white;
+            padding: 1.5rem;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
+        }
+
+        .gallery-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .gallery-description {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .carousel-section {
+            margin: 4rem 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--color-neutral-100), white);
+            border-radius: 1.5rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .dark .carousel-section {
+            background: linear-gradient(135deg, var(--color-neutral-800), var(--color-neutral-900));
+        }
+
+        .carousel-container {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-xl);
+        }
+
+        .carousel-items {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .carousel-item {
+            min-width: 100%;
+            position: relative;
+            aspect-ratio: 16/9;
+        }
+
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .carousel-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+            color: white;
+        }
+
+        .carousel-controls {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+            padding: 0 1rem;
+            z-index: 10;
+        }
+
+        .carousel-btn {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .carousel-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .carousel-indicator {
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 50%;
+            background: var(--color-neutral-300);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dark .carousel-indicator {
+            background: var(--color-neutral-600);
+        }
+
+        .carousel-indicator.active {
+            background: var(--color-primary-600);
+            transform: scale(1.2);
+        }
+
+        .dark .carousel-indicator.active {
+            background: var(--color-primary-400);
+        }
+
+        .carousel-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem 1.5rem;
+            border-radius: 2rem;
+            border: 2px solid var(--color-primary-600);
+            background: var(--color-primary-600);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: transparent;
+            color: var(--color-primary-600);
+            transform: translateY(-2px);
+        }
+
+        .dark .action-btn {
+            border-color: var(--color-primary-400);
+            background: var(--color-primary-400);
+        }
+
+        .dark .action-btn:hover {
+            background: transparent;
+            color: var(--color-primary-400);
+        }
+
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 3rem 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--color-primary-100), var(--color-primary-200));
+            border-radius: 1rem;
+        }
+
+        .dark .stats-bar {
+            background: linear-gradient(135deg, var(--color-primary-900), var(--color-primary-800));
+        }
+
+        .stat-item {
+            text-align: center;
+            color: var(--color-primary-900);
+        }
+
+        .dark .stat-item {
+            color: var(--color-primary-100);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+            margin-top: 0.5rem;
+        }
+
+        .upload-section {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: var(--color-neutral-100);
+            border-radius: 1rem;
+            border: 2px dashed var(--color-neutral-300);
+            text-align: center;
+        }
+
+        .dark .upload-section {
+            background: var(--color-neutral-800);
+            border-color: var(--color-neutral-600);
+        }
+
+        .upload-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--color-primary-600);
+            color: white;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .upload-btn:hover {
+            background: var(--color-primary-700);
+            transform: translateY(-2px);
+        }
+
+        .dark .upload-btn {
+            background: var(--color-primary-500);
+        }
+
+        .dark .upload-btn:hover {
+            background: var(--color-primary-600);
+        }
+
+        .image-info {
+            font-size: 0.875rem;
+            color: var(--color-neutral-500);
+            margin-top: 1rem;
+        }
+
+        .dark .image-info {
+            color: var(--color-neutral-400);
+        }
+
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 1rem;
+            }
+
+            .carousel-section {
+                padding: 1rem;
+                margin: 2rem 0;
+            }
+
+            .carousel-caption {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .filter-btn {
+                width: 100%;
+                max-width: 200px;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-neutral-50 text-neutral-900">
+
+    <!-- Navegación Principal -->
+    <header class="site-header">
+        <nav class="container">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo / Título -->
+                <a href="index.html" class="logo">
+                    <span class="logo-primary">Web</span><span class="logo-dark">Master</span>
+                </a>
+
+                <!-- Menú Desktop -->
+                <div class="nav-desktop">
+                    <a href="index.html" class="nav-link">Inicio</a>
+                    <a href="gestion.html" class="nav-link">Gestión</a>
+                    <a href="galeria.html" class="nav-link active">Galería</a>
+                    <a href="utilidades.html" class="nav-link">Utilidades</a>
+                    <a href="contacto.html" class="btn btn-primary">Contacto</a>
+
+                    <!-- Botón Dark Mode Desktop -->
+                    <button id="theme-toggle" class="btn btn-outline" data-theme-toggle aria-label="Cambiar tema">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                </div>
+
+                <!-- Botón Menú Móvil -->
+                <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Abrir menú">
+                    ☰
+                </button>
+            </div>
+
+            <!-- Menú Móvil (Oculto por defecto) -->
+            <div id="mobile-menu" class="mobile-menu hidden">
+                <a href="index.html" class="mobile-link">Inicio</a>
+                <a href="gestion.html" class="mobile-link">Gestión</a>
+                <a href="galeria.html" class="mobile-link active">Galería</a>
+                <a href="utilidades.html" class="mobile-link">Utilidades</a>
+                <a href="contacto.html" class="mobile-link">Contacto</a>
+                <button id="theme-toggle-mobile" class="btn btn-outline w-full mt-4" data-theme-toggle>
+                    Cambiar Tema <span class="theme-icon">🌓</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="container py-12">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-neutral-900 dark:text-white mb-4">
+                Galería Interactiva
+            </h1>
+            <p class="text-lg text-neutral-600 dark:text-neutral-400 max-w-3xl mx-auto">
+                Explora nuestra colección de imágenes con el carrusel interactivo y la galería filtrable.
+                Todas las funcionalidades están implementadas con JavaScript puro.
+            </p>
+        </div>
+
+        <!-- Carrusel Principal -->
+        <section class="carousel-section">
+            <h2 class="text-2xl font-bold text-center text-neutral-900 dark:text-white mb-6">
+                Carrusel Interactivo
+            </h2>
+            <p class="text-center text-neutral-600 dark:text-neutral-400 mb-8 max-w-2xl mx-auto">
+                Navega manualmente o deja que el carrusel avance automáticamente. Usa los controles para pausar, avanzar
+                o retroceder.
+            </p>
+
+            <div class="carousel-container" id="main-carousel">
+                <div class="carousel-items">
+                    <!-- Las imágenes del carrusel se cargarán dinámicamente -->
+                </div>
+
+                <div class="carousel-controls">
+                    <button class="carousel-btn prev-btn" aria-label="Imagen anterior">
+                        ‹
+                    </button>
+                    <button class="carousel-btn next-btn" aria-label="Siguiente imagen">
+                        ›
+                    </button>
+                </div>
+
+                <div class="carousel-indicators" id="carousel-indicators">
+                    <!-- Los indicadores se generarán dinámicamente -->
+                </div>
+            </div>
+
+            <div class="carousel-actions">
+                <button class="action-btn" id="pause-btn">
+                    ⏸️ Pausar
+                </button>
+                <button class="action-btn" id="play-btn">
+                    ▶️ Reproducir
+                </button>
+                <button class="action-btn" id="fullscreen-btn">
+                    ⛶ Pantalla Completa
+                </button>
+            </div>
+        </section>
+
+        <!-- Estadísticas -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-number" id="total-images">0</div>
+                <div class="stat-label">Imágenes Totales</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="carousel-index">1</div>
+                <div class="stat-label">Imagen Actual</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="filtered-count">0</div>
+                <div class="stat-label">Filtradas</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="views-count">0</div>
+                <div class="stat-label">Vistas Totales</div>
+            </div>
+        </div>
+
+        <!-- Controles de Galería -->
+        <div class="gallery-controls">
+            <button class="filter-btn active" data-filter="all">Todas</button>
+            <button class="filter-btn" data-filter="nature">Naturaleza</button>
+            <button class="filter-btn" data-filter="technology">Tecnología</button>
+            <button class="filter-btn" data-filter="art">Arte</button>
+            <button class="filter-btn" data-filter="abstract">Abstracto</button>
+            <button class="filter-btn" data-filter="favorites">Favoritos</button>
+        </div>
+
+        <!-- Galería Grid -->
+        <div class="gallery-grid" id="gallery-grid">
+            <!-- Las imágenes de la galería se cargarán dinámicamente -->
+        </div>
+
+        <!-- Sección de Subida -->
+        <section class="upload-section" id="upload-section">
+            <h3 class="text-xl font-bold text-neutral-900 dark:text-white mb-2">
+                ¿Tienes una imagen interesante?
+            </h3>
+            <p class="text-neutral-600 dark:text-neutral-400">
+                Sube tu propia imagen para agregarla a la galería (solo demostración).
+            </p>
+
+            <input type="file" id="image-upload" accept="image/*" class="hidden">
+            <label for="image-upload" class="upload-btn">
+                📤 Subir Imagen
+            </label>
+
+            <div class="image-info">
+                Formatos soportados: JPG, PNG, GIF • Máximo: 5MB
+            </div>
+
+            <div id="upload-preview" class="hidden mt-4">
+                <img id="preview-image" class="max-w-xs mx-auto rounded-lg" alt="Vista previa">
+                <button id="confirm-upload" class="btn btn-primary mt-4">
+                    ✅ Confirmar Subida
+                </button>
+            </div>
+        </section>
+
+        <!-- Galería de Favoritos -->
+        <section class="mt-12">
+            <h2 class="text-2xl font-bold text-neutral-900 dark:text-white mb-6">
+                Mis Favoritos
+                <span class="text-sm font-normal text-neutral-500 dark:text-neutral-400">
+                    (Haz clic en ❤️ para agregar a favoritos)
+                </span>
+            </h2>
+            <div class="gallery-grid" id="favorites-grid">
+                <!-- Las imágenes favoritas se mostrarán aquí -->
+            </div>
+            <div id="no-favorites" class="empty-state text-center py-8">
+                <div class="empty-state-icon text-4xl mb-4">❤️</div>
+                <p class="text-neutral-600 dark:text-neutral-400">
+                    Aún no tienes imágenes favoritas. Haz clic en el corazón de cualquier imagen para agregarla aquí.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="text-xl font-bold text-primary-600 dark:text-primary-500">WebMaster</span>
+                    <p class="text-sm text-neutral-500 mt-2">Desarrollo Web - Clase 2023</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">GitHub</a>
+                    <a href="#" class="footer-link">LinkedIn</a>
+                </div>
+            </div>
+            <div class="footer-copyright">
+                &copy; 2023 Proyecto Web. Todos los derechos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Personalizado -->
+    <script src="../JS/script.js"></script>
+
+    <!-- Script específico para galería -->
+    <script>
+        // Datos de imágenes para la galería
+        const galleryImages = [
+            {
+                id: 1,
+                src: '../Imgs/fool.jpeg',
+                title: 'Montañas al Amanecer',
+                description: 'Paisaje natural con las primeras luces del día',
+                category: 'nature',
+                isFavorite: false
+            },
+            {
+                id: 2,
+                src: '../Imgs/magician.jpeg',
+                title: 'Tecnología Moderna',
+                description: 'Circuitos y componentes electrónicos',
+                category: 'technology',
+                isFavorite: true
+            },
+            {
+                id: 3,
+                src: '../Imgs/highpriestess.jpeg',
+                title: 'Expresión Artística',
+                description: 'Pintura abstracta con colores vibrantes',
+                category: 'art',
+                isFavorite: false
+            },
+            {
+                id: 4,
+                src: '../Imgs/empress.jpeg',
+                title: 'Formas Geométricas',
+                description: 'Patrones abstractos con diseño moderno',
+                category: 'abstract',
+                isFavorite: false
+            },
+            {
+                id: 5,
+                src: '../Imgs/emperor.jpeg',
+                title: 'Bosque Encantado',
+                description: 'Senderos entre árboles centenarios',
+                category: 'nature',
+                isFavorite: true
+            },
+            {
+                id: 6,
+                src: '../Imgs/hierophant.jpeg',
+                title: 'Futuro Digital',
+                description: 'Conceptos de inteligencia artificial',
+                category: 'technology',
+                isFavorite: false
+            },
+            {
+                id: 7,
+                src: '../Imgs/lovers.jpeg',
+                title: 'Escultura Moderna',
+                description: 'Obra de arte contemporáneo',
+                category: 'art',
+                isFavorite: false
+            },
+            {
+                id: 8,
+                src: '../Imgs/chariot.jpeg',
+                title: 'Patrones Abstractos',
+                description: 'Diseño minimalista y geométrico',
+                category: 'abstract',
+                isFavorite: true
+            },
+            {
+                id: 9,
+                src: '../Imgs/strenght.jpeg',
+                title: 'Atardecer en el Lago',
+                description: 'Reflejos dorados en el agua',
+                category: 'nature',
+                isFavorite: false
+            }
+        ];
+
+        // Variables del carrusel
+        let currentCarouselIndex = 0;
+        let carouselInterval = null;
+        let isCarouselPlaying = true;
+        let totalViews = 0;
+
+        // Inicializar galería
+        document.addEventListener('DOMContentLoaded', function () {
+            // Inicializar carrusel si existe
+            if (typeof ImageCarousel !== 'undefined') {
+                ImageCarousel.init('main-carousel');
+                loadCarouselImages();
+                startCarousel();
+            }
+
+            // Cargar galería grid
+            loadGallery();
+
+            // Actualizar estadísticas
+            updateStats();
+
+            // Configurar eventos
+            setupEventListeners();
+
+            // Cargar favoritos
+            loadFavorites();
+        });
+
+        // Cargar imágenes en el carrusel
+        function loadCarouselImages() {
+            const carouselItems = document.querySelector('.carousel-items');
+            const indicators = document.getElementById('carousel-indicators');
+
+            if (!carouselItems || !indicators) return;
+
+            carouselItems.innerHTML = '';
+            indicators.innerHTML = '';
+
+            // Tomar solo las primeras 5 imágenes para el carrusel
+            const carouselImages = galleryImages.slice(0, 5);
+
+            carouselImages.forEach((image, index) => {
+                // Crear item del carrusel
+                const item = document.createElement('div');
+                item.className = 'carousel-item';
+                item.dataset.index = index;
+
+                item.innerHTML = `
+                    <img src="${image.src}" alt="${image.title}" 
+                         onerror="this.src='https://placehold.co/800x450/6A00F4/ffffff?text=Imagen+no+disponible'">
+                    <div class="carousel-caption">
+                        <h3 class="text-xl font-bold">${image.title}</h3>
+                        <p>${image.description}</p>
+                        <div class="flex items-center justify-between mt-2">
+                            <span class="text-sm opacity-80">${image.category.toUpperCase()}</span>
+                            <button class="favorite-btn" data-id="${image.id}">
+                                ${image.isFavorite ? '❤️' : '🤍'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                carouselItems.appendChild(item);
+
+                // Crear indicador
+                const indicator = document.createElement('button');
+                indicator.className = 'carousel-indicator';
+                indicator.dataset.index = index;
+                indicator.setAttribute('aria-label', `Ir a imagen ${index + 1}`);
+
+                indicator.addEventListener('click', () => {
+                    goToCarouselSlide(index);
+                });
+
+                indicators.appendChild(indicator);
+            });
+
+            // Mostrar primera imagen
+            showCarouselSlide(0);
+
+            // Actualizar estadísticas
+            document.getElementById('total-images').textContent = galleryImages.length;
+        }
+
+        // Mostrar slide específico del carrusel
+        function showCarouselSlide(index) {
+            const items = document.querySelectorAll('.carousel-item');
+            const indicators = document.querySelectorAll('.carousel-indicator');
+
+            if (items.length === 0) return;
+
+            // Actualizar índice
+            currentCarouselIndex = index;
+
+            // Mover carrusel
+            const carouselItems = document.querySelector('.carousel-items');
+            carouselItems.style.transform = `translateX(-${index * 100}%)`;
+
+            // Actualizar indicadores
+            indicators.forEach((indicator, i) => {
+                if (i === index) {
+                    indicator.classList.add('active');
+                } else {
+                    indicator.classList.remove('active');
+                }
+            });
+
+            // Actualizar estadísticas
+            document.getElementById('carousel-index').textContent = index + 1;
+            totalViews++;
+            document.getElementById('views-count').textContent = totalViews;
+
+            // Guardar en localStorage
+            saveGalleryState();
+        }
+
+        // Ir a slide específico
+        function goToCarouselSlide(index) {
+            stopCarousel();
+            showCarouselSlide(index);
+            setTimeout(startCarousel, 5000); // Reanudar después de 5 segundos
+        }
+
+        // Siguiente slide
+        function nextCarouselSlide() {
+            const items = document.querySelectorAll('.carousel-item');
+            const nextIndex = (currentCarouselIndex + 1) % items.length;
+            showCarouselSlide(nextIndex);
+        }
+
+        // Slide anterior
+        function prevCarouselSlide() {
+            const items = document.querySelectorAll('.carousel-item');
+            const prevIndex = (currentCarouselIndex - 1 + items.length) % items.length;
+            showCarouselSlide(prevIndex);
+        }
+
+        // Iniciar carrusel automático
+        function startCarousel() {
+            if (carouselInterval) clearInterval(carouselInterval);
+
+            isCarouselPlaying = true;
+            carouselInterval = setInterval(() => {
+                nextCarouselSlide();
+            }, 4000); // Cambiar cada 4 segundos
+
+            // Actualizar botones
+            document.getElementById('pause-btn').textContent = '⏸️ Pausar';
+            document.getElementById('play-btn').disabled = true;
+            document.getElementById('pause-btn').disabled = false;
+        }
+
+        // Detener carrusel
+        function stopCarousel() {
+            if (carouselInterval) {
+                clearInterval(carouselInterval);
+                carouselInterval = null;
+            }
+
+            isCarouselPlaying = false;
+
+            // Actualizar botones
+            document.getElementById('pause-btn').textContent = '⏸️ Pausado';
+            document.getElementById('play-btn').disabled = false;
+            document.getElementById('pause-btn').disabled = true;
+        }
+
+        // Cargar galería grid
+        function loadGallery(filter = 'all') {
+            const galleryGrid = document.getElementById('gallery-grid');
+            if (!galleryGrid) return;
+
+            galleryGrid.innerHTML = '';
+
+            // Filtrar imágenes
+            let filteredImages = galleryImages;
+            if (filter !== 'all') {
+                if (filter === 'favorites') {
+                    filteredImages = galleryImages.filter(img => img.isFavorite);
+                } else {
+                    filteredImages = galleryImages.filter(img => img.category === filter);
+                }
+            }
+
+            // Crear elementos de galería
+            filteredImages.forEach(image => {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                item.dataset.id = image.id;
+                item.dataset.category = image.category;
+
+                item.innerHTML = `
+                    <img src="${image.src}" alt="${image.title}"
+                         onerror="this.src='https://placehold.co/300x200/6A00F4/ffffff?text=Imagen+no+disponible'">
+                    <div class="gallery-overlay">
+                        <h3 class="gallery-title">${image.title}</h3>
+                        <p class="gallery-description">${image.description}</p>
+                        <div class="flex justify-between items-center mt-3">
+                            <span class="text-xs bg-white/20 px-2 py-1 rounded">
+                                ${image.category.toUpperCase()}
+                            </span>
+                            <button class="favorite-btn text-xl" data-id="${image.id}">
+                                ${image.isFavorite ? '❤️' : '🤍'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                // Agregar evento click para vista ampliada
+                item.addEventListener('click', function (e) {
+                    if (!e.target.classList.contains('favorite-btn')) {
+                        openImageModal(image);
+                    }
+                });
+
+                galleryGrid.appendChild(item);
+            });
+
+            // Actualizar contador filtrado
+            document.getElementById('filtered-count').textContent = filteredImages.length;
+
+            // Actualizar botones de filtro
+            updateFilterButtons(filter);
+        }
+
+        // Cargar favoritos
+        function loadFavorites() {
+            const favoritesGrid = document.getElementById('favorites-grid');
+            const noFavorites = document.getElementById('no-favorites');
+
+            if (!favoritesGrid || !noFavorites) return;
+
+            const favoriteImages = galleryImages.filter(img => img.isFavorite);
+
+            if (favoriteImages.length === 0) {
+                favoritesGrid.classList.add('hidden');
+                noFavorites.classList.remove('hidden');
+            } else {
+                favoritesGrid.classList.remove('hidden');
+                noFavorites.classList.add('hidden');
+
+                favoritesGrid.innerHTML = '';
+
+                favoriteImages.forEach(image => {
+                    const item = document.createElement('div');
+                    item.className = 'gallery-item';
+
+                    item.innerHTML = `
+                        <img src="${image.src}" alt="${image.title}"
+                             onerror="this.src='https://placehold.co/300x200/6A00F4/ffffff?text=Imagen+no+disponible'">
+                        <div class="gallery-overlay">
+                            <h3 class="gallery-title">${image.title}</h3>
+                            <p class="gallery-description">${image.description}</p>
+                            <button class="remove-favorite-btn mt-3 text-xl" data-id="${image.id}">
+                                ❌ Remover
+                            </button>
+                        </div>
+                    `;
+
+                    favoritesGrid.appendChild(item);
+                });
+            }
+        }
+
+        // Abrir modal de imagen
+        function openImageModal(image) {
+            // Crear modal si no existe
+            let modal = document.getElementById('image-modal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'image-modal';
+                modal.className = 'modal hidden';
+                modal.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.9);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 1000;
+                    cursor: pointer;
+                `;
+
+                modal.innerHTML = `
+                    <div class="modal-content" style="max-width: 90%; max-height: 90%;" onclick="event.stopPropagation()">
+                        <img src="${image.src}" alt="${image.title}" 
+                             style="max-width: 100%; max-height: 70vh; object-fit: contain;">
+                        <div style="color: white; text-align: center; padding: 1rem;">
+                            <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem;">
+                                ${image.title}
+                            </h3>
+                            <p>${image.description}</p>
+                        </div>
+                        <button id="close-modal" 
+                                style="position: absolute; top: 1rem; right: 1rem; 
+                                       background: rgba(255,255,255,0.2); color: white; 
+                                       border: none; border-radius: 50%; width: 2.5rem; 
+                                       height: 2.5rem; font-size: 1.5rem; cursor: pointer;">
+                            &times;
+                        </button>
+                    </div>
+                `;
+
+                document.body.appendChild(modal);
+
+                // Agregar evento para cerrar
+                modal.addEventListener('click', () => {
+                    modal.classList.add('hidden');
+                });
+
+                const closeBtn = document.getElementById('close-modal');
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        modal.classList.add('hidden');
+                    });
+                }
+            }
+
+            // Actualizar imagen en el modal
+            const modalImg = modal.querySelector('img');
+            const modalTitle = modal.querySelector('h3');
+            const modalDesc = modal.querySelector('p');
+
+            modalImg.src = image.src;
+            modalImg.alt = image.title;
+            modalTitle.textContent = image.title;
+            modalDesc.textContent = image.description;
+
+            // Mostrar modal
+            modal.classList.remove('hidden');
+
+            // Incrementar vistas
+            totalViews++;
+            document.getElementById('views-count').textContent = totalViews;
+        }
+
+        // Configurar event listeners
+        function setupEventListeners() {
+            // Botones del carrusel
+            const prevBtn = document.querySelector('.prev-btn');
+            const nextBtn = document.querySelector('.next-btn');
+            const pauseBtn = document.getElementById('pause-btn');
+            const playBtn = document.getElementById('play-btn');
+            const fullscreenBtn = document.getElementById('fullscreen-btn');
+
+            if (prevBtn) prevBtn.addEventListener('click', prevCarouselSlide);
+            if (nextBtn) nextBtn.addEventListener('click', nextCarouselSlide);
+            if (pauseBtn) pauseBtn.addEventListener('click', stopCarousel);
+            if (playBtn) playBtn.addEventListener('click', startCarousel);
+            if (fullscreenBtn) {
+                fullscreenBtn.addEventListener('click', toggleFullscreen);
+            }
+
+            // Filtros de galería
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const filter = this.dataset.filter;
+                    loadGallery(filter);
+                });
+            });
+
+            // Botones de favoritos (delegación de eventos)
+            document.addEventListener('click', function (e) {
+                if (e.target.classList.contains('favorite-btn')) {
+                    e.stopPropagation();
+                    toggleFavorite(parseInt(e.target.dataset.id));
+                }
+
+                if (e.target.classList.contains('remove-favorite-btn')) {
+                    e.stopPropagation();
+                    toggleFavorite(parseInt(e.target.dataset.id));
+                }
+            });
+
+            // Subida de imágenes
+            const uploadInput = document.getElementById('image-upload');
+            const confirmUpload = document.getElementById('confirm-upload');
+            const uploadPreview = document.getElementById('upload-preview');
+
+            if (uploadInput) {
+                uploadInput.addEventListener('change', function (e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function (event) {
+                            const previewImage = document.getElementById('preview-image');
+                            if (previewImage) {
+                                previewImage.src = event.target.result;
+                                uploadPreview.classList.remove('hidden');
+                            }
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
+            if (confirmUpload) {
+                confirmUpload.addEventListener('click', function () {
+                    // Simular subida de imagen
+                    const previewImage = document.getElementById('preview-image');
+                    if (previewImage && previewImage.src) {
+                        // Agregar nueva imagen a la galería
+                        const newImage = {
+                            id: Date.now(),
+                            src: previewImage.src,
+                            title: 'Imagen Subida',
+                            description: 'Subida por el usuario',
+                            category: 'nature',
+                            isFavorite: false
+                        };
+
+                        galleryImages.unshift(newImage);
+                        loadGallery();
+                        loadCarouselImages();
+                        updateStats();
+
+                        // Resetear formulario
+                        uploadInput.value = '';
+                        uploadPreview.classList.add('hidden');
+
+                        // Mostrar mensaje
+                        showNotification('✅ Imagen subida correctamente', 'success');
+                    }
+                });
+            }
+
+            // Navegación con teclado
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'ArrowLeft') prevCarouselSlide();
+                if (e.key === 'ArrowRight') nextCarouselSlide();
+                if (e.key === ' ') {
+                    e.preventDefault();
+                    if (isCarouselPlaying) {
+                        stopCarousel();
+                    } else {
+                        startCarousel();
+                    }
+                }
+                if (e.key === 'Escape') {
+                    const modal = document.getElementById('image-modal');
+                    if (modal) modal.classList.add('hidden');
+                }
+            });
+        }
+
+        // Alternar favorito
+        function toggleFavorite(imageId) {
+            const image = galleryImages.find(img => img.id === imageId);
+            if (image) {
+                image.isFavorite = !image.isFavorite;
+
+                // Actualizar todas las instancias de este botón
+                document.querySelectorAll(`.favorite-btn[data-id="${imageId}"]`).forEach(btn => {
+                    btn.textContent = image.isFavorite ? '❤️' : '🤍';
+                });
+
+                // Recargar favoritos
+                loadFavorites();
+
+                // Recargar galería si está en filtro de favoritos
+                const activeFilter = document.querySelector('.filter-btn.active');
+                if (activeFilter && activeFilter.dataset.filter === 'favorites') {
+                    loadGallery('favorites');
+                }
+
+                // Guardar en localStorage
+                saveGalleryState();
+
+                // Mostrar notificación
+                showNotification(
+                    image.isFavorite ? '❤️ Agregado a favoritos' : '💔 Removido de favoritos',
+                    'info'
+                );
+            }
+        }
+
+        // Actualizar botones de filtro
+        function updateFilterButtons(activeFilter) {
+            document.querySelectorAll('.filter-btn').forEach(button => {
+                if (button.dataset.filter === activeFilter) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            });
+        }
+
+        // Actualizar estadísticas
+        function updateStats() {
+            document.getElementById('total-images').textContent = galleryImages.length;
+
+            const favoriteCount = galleryImages.filter(img => img.isFavorite).length;
+            document.getElementById('filtered-count').textContent = favoriteCount;
+        }
+
+        // Pantalla completa
+        function toggleFullscreen() {
+            const carousel = document.getElementById('main-carousel');
+            if (!carousel) return;
+
+            if (!document.fullscreenElement) {
+                if (carousel.requestFullscreen) {
+                    carousel.requestFullscreen();
+                } else if (carousel.webkitRequestFullscreen) {
+                    carousel.webkitRequestFullscreen();
+                } else if (carousel.msRequestFullscreen) {
+                    carousel.msRequestFullscreen();
+                }
+
+                document.getElementById('fullscreen-btn').textContent = '⛶ Salir de Pantalla Completa';
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+
+                document.getElementById('fullscreen-btn').textContent = '⛶ Pantalla Completa';
+            }
+        }
+
+        // Guardar estado de la galería
+        function saveGalleryState() {
+            const state = {
+                images: galleryImages,
+                totalViews: totalViews,
+                lastUpdate: new Date().toISOString()
+            };
+
+            localStorage.setItem('galleryState', JSON.stringify(state));
+        }
+
+        // Cargar estado de la galería
+        function loadGalleryState() {
+            const savedState = localStorage.getItem('galleryState');
+            if (savedState) {
+                try {
+                    const state = JSON.parse(savedState);
+                    if (state.images) {
+                        // Actualizar imágenes con datos guardados
+                        state.images.forEach(savedImage => {
+                            const existingImage = galleryImages.find(img => img.id === savedImage.id);
+                            if (existingImage) {
+                                existingImage.isFavorite = savedImage.isFavorite || false;
+                            }
+                        });
+                    }
+                    totalViews = state.totalViews || 0;
+                } catch (e) {
+                    console.error('Error loading gallery state:', e);
+                }
+            }
+        }
+
+        // Mostrar notificación
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                color: white;
+                font-weight: 600;
+                z-index: 1000;
+                animation: slideIn 0.3s ease-out;
+            `;
+
+            if (type === 'success') {
+                notification.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+            } else if (type === 'error') {
+                notification.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+            } else {
+                notification.style.background = 'linear-gradient(135deg, #6A00F4, #8900F2)';
+            }
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Cargar estado guardado al inicio
+        loadGalleryState();
+    </script>
+</body>
+
+</html>

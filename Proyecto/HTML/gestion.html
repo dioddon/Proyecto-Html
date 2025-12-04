@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Datos | Proyecto Web Interactivo</title>
+
+    <!-- Fuente Google: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="../CSS/estilos.css">
+    <script src="../JS/tema.js" defer></script>
+
+    <style>
+        /* Estilos específicos para gestión.html */
+        .management-grid {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: 1fr;
+        }
+
+        @media (min-width: 1024px) {
+            .management-grid {
+                grid-template-columns: 1fr 2fr;
+            }
+        }
+
+        .form-section {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--color-neutral-200);
+        }
+
+        .dark .form-section {
+            background: var(--color-neutral-800);
+            border-color: var(--color-neutral-700);
+        }
+
+        .list-section {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--color-neutral-200);
+        }
+
+        .dark .list-section {
+            background: var(--color-neutral-800);
+            border-color: var(--color-neutral-700);
+        }
+
+        .items-grid {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            margin-top: 1.5rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-high {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .status-medium {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+
+        .status-low {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        .progress-bar {
+            height: 0.5rem;
+            background: var(--color-neutral-200);
+            border-radius: 0.25rem;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+
+        .dark .progress-bar {
+            background: var(--color-neutral-700);
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 0.25rem;
+            transition: width 0.3s ease;
+        }
+
+        .progress-high {
+            background: linear-gradient(90deg, #10b981, #059669);
+        }
+
+        .progress-medium {
+            background: linear-gradient(90deg, #f59e0b, #d97706);
+        }
+
+        .progress-low {
+            background: linear-gradient(90deg, #ef4444, #dc2626);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--color-neutral-500);
+        }
+
+        .dark .empty-state {
+            color: var(--color-neutral-400);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .actions-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--color-neutral-200);
+        }
+
+        .dark .actions-bar {
+            border-bottom-color: var(--color-neutral-700);
+        }
+
+        .filters {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.375rem;
+            border: 1px solid var(--color-neutral-300);
+            background: white;
+            color: var(--color-neutral-700);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dark .filter-btn {
+            background: var(--color-neutral-700);
+            border-color: var(--color-neutral-600);
+            color: var(--color-neutral-300);
+        }
+
+        .filter-btn.active {
+            background: var(--color-primary-600);
+            border-color: var(--color-primary-600);
+            color: white;
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+
+<body class="bg-neutral-50 text-neutral-900">
+
+    <!-- Navegación Principal -->
+    <header class="site-header">
+        <nav class="container">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo / Título -->
+                <a href="index.html" class="logo">
+                    <span class="logo-primary">Web</span><span class="logo-dark">Master</span>
+                </a>
+
+                <!-- Menú Desktop -->
+                <div class="nav-desktop">
+                    <a href="index.html" class="nav-link">Inicio</a>
+                    <a href="gestion.html" class="nav-link active">Gestión</a>
+                    <a href="galeria.html" class="nav-link">Galería</a>
+                    <a href="utilidades.html" class="nav-link">Utilidades</a>
+                    <a href="contacto.html" class="btn btn-primary">Contacto</a>
+
+                    <!-- Botón Dark Mode Desktop -->
+                    <button id="theme-toggle" class="btn btn-outline" data-theme-toggle aria-label="Cambiar tema">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                </div>
+
+                <!-- Botón Menú Móvil -->
+                <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Abrir menú">
+                    ☰
+                </button>
+            </div>
+
+            <!-- Menú Móvil (Oculto por defecto) -->
+            <div id="mobile-menu" class="mobile-menu hidden">
+                <a href="index.html" class="mobile-link">Inicio</a>
+                <a href="gestion.html" class="mobile-link active">Gestión</a>
+                <a href="galeria.html" class="mobile-link">Galería</a>
+                <a href="utilidades.html" class="mobile-link">Utilidades</a>
+                <a href="contacto.html" class="mobile-link">Contacto</a>
+                <button id="theme-toggle-mobile" class="btn btn-outline w-full mt-4" data-theme-toggle>
+                    Cambiar Tema <span class="theme-icon">🌓</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="container py-12">
+        <h1 class="text-4xl font-bold text-center text-neutral-900 dark:text-white mb-4">
+            Gestión de Información Dinámica
+        </h1>
+        <p class="text-lg text-center text-neutral-600 dark:text-neutral-400 mb-12 max-w-3xl mx-auto">
+            Utiliza el formulario para ingresar datos. Al enviarlos correctamente, se creará un nuevo elemento en la
+            lista inferior, demostrando el manejo del DOM y la validación de JavaScript.
+        </p>
+
+        <div class="management-grid">
+            <!-- Columna del Formulario -->
+            <section class="form-section">
+                <h2 class="text-2xl font-bold text-primary-600 dark:text-primary-400 mb-6">
+                    Nuevo Registro
+                </h2>
+
+                <form id="data-form" class="space-y-6">
+                    <!-- Campo Nombre -->
+                    <div class="form-group">
+                        <label for="item-title" class="form-label">
+                            Nombre del Elemento
+                        </label>
+                        <input type="text" id="item-title" name="item-title"
+                            placeholder="Ej: Reporte Anual, Tarea Pendiente, etc." class="form-input" required
+                            data-min="3" data-max="50">
+                        <div class="error-message"></div>
+                    </div>
+
+                    <!-- Campo Valor (Numérico) -->
+                    <div class="form-group">
+                        <label for="item-value" class="form-label">
+                            Valor Numérico (0-100)
+                        </label>
+                        <input type="number" id="item-value" name="item-value" placeholder="Ej: 75" class="form-input"
+                            min="0" max="100" required>
+                        <div class="error-message"></div>
+                    </div>
+
+                    <!-- Campo Categoría -->
+                    <div class="form-group">
+                        <label for="item-category" class="form-label">
+                            Categoría
+                        </label>
+                        <select id="item-category" name="item-category" class="form-input">
+                            <option value="trabajo">Trabajo</option>
+                            <option value="estudio" selected>Estudio</option>
+                            <option value="personal">Personal</option>
+                            <option value="proyecto">Proyecto</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+
+                    <!-- Campo Descripción -->
+                    <div class="form-group">
+                        <label for="item-description" class="form-label">
+                            Descripción (Máx 150 caracteres)
+                        </label>
+                        <textarea id="item-description" name="item-description" rows="3"
+                            placeholder="Detalles concisos del elemento..." class="form-input" maxlength="150"
+                            required></textarea>
+                        <div class="error-message"></div>
+                        <div class="text-right text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+                            <span id="char-count">0</span>/150 caracteres
+                        </div>
+                    </div>
+
+                    <!-- Campos adicionales -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="form-group">
+                            <label for="item-priority" class="form-label">
+                                Prioridad
+                            </label>
+                            <select id="item-priority" name="item-priority" class="form-input">
+                                <option value="alta">Alta</option>
+                                <option value="media" selected>Media</option>
+                                <option value="baja">Baja</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="item-date" class="form-label">
+                                Fecha Límite
+                            </label>
+                            <input type="date" id="item-date" name="item-date" class="form-input">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-full">
+                        ➕ Agregar a la Lista
+                    </button>
+
+                    <!-- Mensaje de estado -->
+                    <div id="form-message" class="text-center font-medium text-sm pt-2 hidden"></div>
+                </form>
+            </section>
+
+            <!-- Columna de la Lista Dinámica -->
+            <section class="list-section">
+                <div class="actions-bar">
+                    <h2 class="text-2xl font-bold text-neutral-900 dark:text-white">
+                        Lista de Elementos Creados
+                        <span class="text-base font-normal text-neutral-500 dark:text-neutral-400">
+                            (Manipulación del DOM)
+                        </span>
+                    </h2>
+
+                    <div class="filters">
+                        <button class="filter-btn active" data-filter="all">Todos</button>
+                        <button class="filter-btn" data-filter="trabajo">Trabajo</button>
+                        <button class="filter-btn" data-filter="estudio">Estudio</button>
+                        <button class="filter-btn" data-filter="personal">Personal</button>
+                        <button class="filter-btn" data-filter="alta">Alta Prioridad</button>
+                    </div>
+                </div>
+
+                <!-- Contador de elementos -->
+                <div class="flex justify-between items-center mb-4">
+                    <div id="items-count" class="text-sm text-neutral-600 dark:text-neutral-400">
+                        Total: <span class="font-bold">0</span> elementos
+                    </div>
+                    <button id="clear-all-btn" class="btn btn-outline btn-sm" disabled>
+                        🗑️ Limpiar Todo
+                    </button>
+                </div>
+
+                <!-- Contenedor de la lista -->
+                <div id="lista-dinamica" class="items-grid">
+                    <!-- Los elementos generados por JS se insertarán aquí -->
+
+                    <!-- Ejemplo inicial (se eliminará al agregar primer elemento) -->
+                    <div class="card dynamic-item" data-id="example" data-category="estudio" data-priority="media">
+                        <div class="item-header"
+                            style="border-left: 4px solid var(--color-primary-600); padding-left: 1rem;">
+                            <h3 class="item-title">Elemento de Ejemplo</h3>
+                            <div class="flex justify-between items-center mt-2">
+                                <span class="item-date text-sm text-neutral-500 dark:text-neutral-400">
+                                    Hoy
+                                </span>
+                                <span class="status-badge status-medium">
+                                    Media
+                                </span>
+                            </div>
+                        </div>
+                        <div class="item-content mt-4">
+                            <p class="text-neutral-700 dark:text-neutral-300 text-sm mb-3">
+                                Este es un elemento de ejemplo pre-cargado para mostrar el estilo de las tarjetas.
+                                Intenta agregar tu propio elemento usando el formulario.
+                            </p>
+
+                            <div class="mb-3">
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="text-neutral-600 dark:text-neutral-400">Progreso:</span>
+                                    <span class="font-bold">50%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill progress-medium" style="width: 50%"></div>
+                                </div>
+                            </div>
+
+                            <div class="text-sm text-neutral-600 dark:text-neutral-400">
+                                <span class="font-medium">Categoría:</span> Estudio
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-outline btn-sm w-full delete-btn" data-id="example">
+                                ❌ Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Estado vacío -->
+                <div id="lista-vacia-msg" class="empty-state hidden">
+                    <div class="empty-state-icon">📝</div>
+                    <h3 class="text-lg font-semibold mb-2">Lista Vacía</h3>
+                    <p class="text-neutral-600 dark:text-neutral-400">
+                        Aún no hay elementos en la lista. ¡Usa el formulario para agregar el primero!
+                    </p>
+                </div>
+
+                <!-- Estadísticas -->
+                <div class="mt-8 p-4 bg-neutral-100 dark:bg-neutral-800 rounded-lg">
+                    <h4 class="font-bold text-neutral-900 dark:text-white mb-2">Estadísticas</h4>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <div class="text-neutral-600 dark:text-neutral-400">Total de Elementos:</div>
+                            <div id="stats-total" class="font-bold">1</div>
+                        </div>
+                        <div>
+                            <div class="text-neutral-600 dark:text-neutral-400">Promedio de Valor:</div>
+                            <div id="stats-average" class="font-bold">50%</div>
+                        </div>
+                        <div>
+                            <div class="text-neutral-600 dark:text-neutral-400">Prioridad Alta:</div>
+                            <div id="stats-high" class="font-bold">0</div>
+                        </div>
+                        <div>
+                            <div class="text-neutral-600 dark:text-neutral-400">Categoría Estudio:</div>
+                            <div id="stats-study" class="font-bold">1</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="text-xl font-bold text-primary-600 dark:text-primary-500">WebMaster</span>
+                    <p class="text-sm text-neutral-500 mt-2">Desarrollo Web - Clase 2023</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">GitHub</a>
+                    <a href="#" class="footer-link">LinkedIn</a>
+                </div>
+            </div>
+            <div class="footer-copyright">
+                &copy; 2023 Proyecto Web. Todos los derechos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Personalizado -->
+    <script src="../JS/script.js"></script>
+
+    <!-- Script específico para gestión -->
+    <script>
+        // Gestión específica de la página
+        document.addEventListener('DOMContentLoaded', function () {
+            // Inicializar lista dinámica
+            if (typeof DynamicList !== 'undefined') {
+                DynamicList.init('lista-dinamica');
+            }
+
+            // Contador de caracteres para descripción
+            const descriptionInput = document.getElementById('item-description');
+            const charCount = document.getElementById('char-count');
+
+            if (descriptionInput && charCount) {
+                descriptionInput.addEventListener('input', function () {
+                    charCount.textContent = this.value.length;
+
+                    // Cambiar color si se acerca al límite
+                    if (this.value.length > 140) {
+                        charCount.style.color = '#ef4444';
+                    } else if (this.value.length > 120) {
+                        charCount.style.color = '#f59e0b';
+                    } else {
+                        charCount.style.color = '';
+                    }
+                });
+
+                // Inicializar contador
+                charCount.textContent = descriptionInput.value.length;
+            }
+
+            // Configurar filtros
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    // Remover clase active de todos los botones
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+
+                    // Agregar clase active al botón clickeado
+                    this.classList.add('active');
+
+                    const filter = this.dataset.filter;
+                    filterItems(filter);
+                });
+            });
+
+            // Botón limpiar todo
+            const clearAllBtn = document.getElementById('clear-all-btn');
+            if (clearAllBtn) {
+                clearAllBtn.addEventListener('click', function () {
+                    if (confirm('¿Estás seguro de que quieres eliminar todos los elementos?')) {
+                        if (typeof DynamicList !== 'undefined') {
+                            DynamicList.clearAll();
+                            updateStats();
+                        }
+                    }
+                });
+            }
+
+            // Actualizar estadísticas periódicamente
+            setInterval(updateStats, 2000);
+
+            // Función para filtrar elementos
+            function filterItems(filter) {
+                const items = document.querySelectorAll('.dynamic-item');
+
+                items.forEach(item => {
+                    if (filter === 'all') {
+                        item.style.display = 'block';
+                    } else if (filter === 'alta') {
+                        if (item.dataset.priority === 'alta') {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    } else {
+                        if (item.dataset.category === filter) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    }
+                });
+            }
+
+            // Función para actualizar estadísticas
+            function updateStats() {
+                const items = document.querySelectorAll('.dynamic-item:not([data-id="example"])');
+                const total = items.length;
+
+                // Actualizar contador
+                document.getElementById('items-count').innerHTML =
+                    `Total: <span class="font-bold">${total}</span> elementos`;
+
+                // Habilitar/deshabilitar botón limpiar
+                if (clearAllBtn) {
+                    clearAllBtn.disabled = total === 0;
+                }
+
+                // Calcular estadísticas
+                let sumValues = 0;
+                let highPriority = 0;
+                let studyCategory = 0;
+
+                items.forEach(item => {
+                    // Obtener valor
+                    const valueElement = item.querySelector('.progress-fill');
+                    if (valueElement) {
+                        const width = valueElement.style.width;
+                        const value = parseInt(width) || 50;
+                        sumValues += value;
+                    }
+
+                    // Contar prioridad alta
+                    if (item.dataset.priority === 'alta') {
+                        highPriority++;
+                    }
+
+                    // Contar categoría estudio
+                    if (item.dataset.category === 'estudio') {
+                        studyCategory++;
+                    }
+                });
+
+                // Actualizar UI
+                document.getElementById('stats-total').textContent = total;
+                document.getElementById('stats-average').textContent =
+                    total > 0 ? `${Math.round(sumValues / total)}%` : '0%';
+                document.getElementById('stats-high').textContent = highPriority;
+                document.getElementById('stats-study').textContent = studyCategory;
+
+                // Mostrar/ocultar estado vacío
+                const emptyState = document.getElementById('lista-vacia-msg');
+                const exampleItem = document.querySelector('.dynamic-item[data-id="example"]');
+
+                if (total === 0 && exampleItem) {
+                    emptyState.classList.remove('hidden');
+                } else {
+                    emptyState.classList.add('hidden');
+                }
+            }
+
+            // Configurar envío del formulario
+            const form = document.getElementById('data-form');
+            if (form) {
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+
+                    // Validar formulario
+                    if (typeof FormValidator !== 'undefined') {
+                        if (FormValidator.validateForm('data-form')) {
+                            // Obtener datos del formulario
+                            const formData = {
+                                title: document.getElementById('item-title').value.trim(),
+                                value: parseInt(document.getElementById('item-value').value) || 50,
+                                description: document.getElementById('item-description').value.trim(),
+                                category: document.getElementById('item-category').value,
+                                priority: document.getElementById('item-priority').value,
+                                date: document.getElementById('item-date').value || new Date().toISOString().split('T')[0]
+                            };
+
+                            // Crear elemento HTML
+                            createListItem(formData);
+
+                            // Mostrar mensaje de éxito
+                            showMessage('✅ Elemento agregado correctamente', 'success');
+
+                            // Limpiar formulario
+                            form.reset();
+                            charCount.textContent = '0';
+
+                            // Actualizar estadísticas
+                            updateStats();
+                        } else {
+                            showMessage('❌ Por favor, corrige los errores del formulario', 'error');
+                        }
+                    }
+                });
+            }
+
+            // Función para crear elementos de lista
+            function createListItem(data) {
+                // Eliminar elemento de ejemplo si existe
+                const exampleItem = document.querySelector('.dynamic-item[data-id="example"]');
+                if (exampleItem) {
+                    exampleItem.remove();
+                }
+
+                // Determinar color según valor
+                let statusClass = 'status-medium';
+                let progressClass = 'progress-medium';
+                if (data.value >= 70) {
+                    statusClass = 'status-high';
+                    progressClass = 'progress-high';
+                } else if (data.value < 40) {
+                    statusClass = 'status-low';
+                    progressClass = 'progress-low';
+                }
+
+                // Determinar color de borde según categoría
+                let borderColor = 'var(--color-primary-600)';
+                switch (data.category) {
+                    case 'trabajo': borderColor = 'var(--color-secondary-300)'; break;
+                    case 'estudio': borderColor = 'var(--color-primary-600)'; break;
+                    case 'personal': borderColor = 'var(--color-secondary-600)'; break;
+                    case 'proyecto': borderColor = 'var(--color-primary-800)'; break;
+                    default: borderColor = 'var(--color-neutral-600)';
+                }
+
+                // Formatear fecha
+                let dateText = 'Hoy';
+                if (data.date) {
+                    const itemDate = new Date(data.date);
+                    const today = new Date();
+                    const diffTime = Math.abs(itemDate - today);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                    if (diffDays === 0) {
+                        dateText = 'Hoy';
+                    } else if (diffDays === 1) {
+                        dateText = 'Mañana';
+                    } else if (diffDays > 1 && diffDays <= 7) {
+                        dateText = `En ${diffDays} días`;
+                    } else {
+                        dateText = itemDate.toLocaleDateString('es-ES', {
+                            day: 'numeric',
+                            month: 'short'
+                        });
+                    }
+                }
+
+                // Crear elemento
+                const itemId = 'item-' + Date.now();
+                const itemHTML = `
+                    <div class="card dynamic-item" data-id="${itemId}" data-category="${data.category}" data-priority="${data.priority}">
+                        <div class="item-header" style="border-left: 4px solid ${borderColor}; padding-left: 1rem;">
+                            <h3 class="item-title">${data.title}</h3>
+                            <div class="flex justify-between items-center mt-2">
+                                <span class="item-date text-sm text-neutral-500 dark:text-neutral-400">
+                                    ${dateText}
+                                </span>
+                                <span class="status-badge ${statusClass}">
+                                    ${data.priority === 'alta' ? 'Alta' : data.priority === 'baja' ? 'Baja' : 'Media'}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="item-content mt-4">
+                            <p class="text-neutral-700 dark:text-neutral-300 text-sm mb-3">
+                                ${data.description}
+                            </p>
+                            
+                            <div class="mb-3">
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="text-neutral-600 dark:text-neutral-400">Progreso:</span>
+                                    <span class="font-bold">${data.value}%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill ${progressClass}" style="width: ${data.value}%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-between text-sm text-neutral-600 dark:text-neutral-400">
+                                <div>
+                                    <span class="font-medium">Categoría:</span> 
+                                    ${data.category.charAt(0).toUpperCase() + data.category.slice(1)}
+                                </div>
+                                <div>
+                                    <span class="font-medium">ID:</span> 
+                                    ${itemId.slice(-6)}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-outline btn-sm delete-btn" data-id="${itemId}">
+                                ❌ Eliminar
+                            </button>
+                            <button class="btn btn-outline btn-sm edit-btn" data-id="${itemId}">
+                                ✏️ Editar
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                // Agregar al contenedor
+                const container = document.getElementById('lista-dinamica');
+                if (container) {
+                    container.insertAdjacentHTML('afterbegin', itemHTML);
+
+                    // Agregar listeners a los botones
+                    const newItem = container.querySelector(`[data-id="${itemId}"]`);
+                    const deleteBtn = newItem.querySelector('.delete-btn');
+                    const editBtn = newItem.querySelector('.edit-btn');
+
+                    if (deleteBtn) {
+                        deleteBtn.addEventListener('click', function () {
+                            if (confirm('¿Estás seguro de que quieres eliminar este elemento?')) {
+                                newItem.remove();
+                                updateStats();
+                                showMessage('🗑️ Elemento eliminado', 'info');
+                            }
+                        });
+                    }
+
+                    if (editBtn) {
+                        editBtn.addEventListener('click', function () {
+                            // Aquí se podría implementar la edición
+                            showMessage('✏️ Funcionalidad de edición en desarrollo', 'info');
+                        });
+                    }
+                }
+            }
+
+            // Función para mostrar mensajes
+            function showMessage(text, type) {
+                const messageDiv = document.getElementById('form-message');
+                if (messageDiv) {
+                    messageDiv.textContent = text;
+                    messageDiv.className = 'text-center font-medium text-sm pt-2';
+
+                    switch (type) {
+                        case 'success':
+                            messageDiv.classList.add('text-green-600');
+                            break;
+                        case 'error':
+                            messageDiv.classList.add('text-red-600');
+                            break;
+                        default:
+                            messageDiv.classList.add('text-blue-600');
+                    }
+
+                    messageDiv.classList.remove('hidden');
+
+                    // Ocultar después de 3 segundos
+                    setTimeout(() => {
+                        messageDiv.classList.add('hidden');
+                    }, 3000);
+                }
+            }
+
+            // Inicializar estadísticas
+            updateStats();
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio | Proyecto Web Interactivo</title>
+
+    <!-- Fuente Google: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="../CSS/estilos.css">
+    <script src="../JS/tema.js" defer></script>
+
+    <style>
+        /* Estilos específicos para la página index */
+        .feature-grid {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, var(--color-primary-100), var(--color-primary-200));
+            color: var(--color-primary-800);
+        }
+
+        .dark .stat-card {
+            background: linear-gradient(135deg, var(--color-primary-900), var(--color-primary-800));
+            color: var(--color-primary-100);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .testimonial-slider {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1rem;
+            margin-top: 3rem;
+        }
+
+        .testimonial-slide {
+            padding: 2rem;
+            background: white;
+            border-radius: 1rem;
+            text-align: center;
+        }
+
+        .dark .testimonial-slide {
+            background: var(--color-neutral-800);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1rem;
+            color: var(--color-neutral-700);
+        }
+
+        .dark .testimonial-text {
+            color: var(--color-neutral-300);
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--color-primary-600);
+        }
+    </style>
+</head>
+
+<body class="bg-neutral-50 text-neutral-900">
+
+
+    <!-- Navegación Principal -->
+    <header class="site-header">
+        <nav class="container">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo / Título -->
+                <a href="index.html" class="logo">
+                    <span class="logo-primary">Web</span><span class="logo-dark">Master</span>
+                </a>
+
+                <!-- Menú Desktop -->
+                <div class="nav-desktop">
+                    <a href="index.html" class="nav-link active">Inicio</a>
+                    <a href="gestion.html" class="nav-link">Gestión</a>
+                    <a href="galeria.html" class="nav-link">Galería</a>
+                    <a href="utilidades.html" class="nav-link">Utilidades</a>
+                    <a href="contacto.html" class="btn btn-primary">Contacto</a>
+
+                    <!-- Botón Dark Mode Desktop -->
+                    <button id="theme-toggle" class="btn btn-outline" data-theme-toggle aria-label="Cambiar tema">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                </div>
+
+                <!-- Botón Menú Móvil -->
+                <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Abrir menú">
+                    ☰
+                </button>
+            </div>
+
+            <!-- Menú Móvil (Oculto por defecto) -->
+            <div id="mobile-menu" class="mobile-menu hidden">
+                <a href="index.html" class="mobile-link active">Inicio</a>
+                <a href="gestion.html" class="mobile-link">Gestión</a>
+                <a href="galeria.html" class="mobile-link">Galería</a>
+                <a href="utilidades.html" class="mobile-link">Utilidades</a>
+                <a href="contacto.html" class="mobile-link">Contacto</a>
+                <button id="theme-toggle-mobile" class="btn btn-outline w-full mt-4" data-theme-toggle>
+                    Cambiar Tema <span class="theme-icon">🌓</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="flex-grow">
+        <!-- Sección Hero (Banner) -->
+        <section class="hero">
+            <div class="container text-center relative z-10">
+                <span class="hero-badge">
+                    Proyecto Final de Desarrollo Web
+                </span>
+                <h1 class="hero-title">
+                    Gestión de Información <br>
+                    <span class="gradient-text">Interactiva y Moderna</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Una aplicación web completa desarrollada con HTML5, CSS y JavaScript.
+                    Explora funcionalidades dinámicas, validación de datos y diseño adaptativo.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="gestion.html" class="btn btn-primary btn-lg">
+                        Empezar Gestión
+                    </a>
+                    <a href="#features" class="btn btn-outline btn-lg">
+                        Ver Características
+                    </a>
+                </div>
+            </div>
+
+            <!-- Elementos decorativos de fondo -->
+            <div class="hero-decoration decoration-1"></div>
+            <div class="hero-decoration decoration-2"></div>
+        </section>
+
+        <!-- Artículo de Introducción / Objetivos -->
+        <article id="features" class="container py-20">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-neutral-900 dark:text-white mb-4">Módulos del Proyecto</h2>
+                <p class="text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
+                    Este sitio integra múltiples tecnologías para cumplir con los requerimientos académicos. Navega a
+                    través de las siguientes secciones para probar las funcionalidades.
+                </p>
+            </div>
+
+            <div class="feature-grid">
+                <!-- Tarjeta: Gestión -->
+                <div class="card">
+                    <div class="card-icon"
+                        style="background: linear-gradient(135deg, var(--color-primary-100), var(--color-primary-200));">
+                        📝
+                    </div>
+                    <h3 class="card-title">Gestión de Datos</h3>
+                    <p class="card-content">
+                        Formulario con validaciones estrictas y manipulación del DOM para agregar elementos a una lista
+                        dinámica.
+                    </p>
+                    <a href="gestion.html" class="text-primary-600 dark:text-primary-400 font-semibold hover:underline">
+                        Ir a Gestión &rarr;
+                    </a>
+                </div>
+
+                <!-- Tarjeta: Galería -->
+                <div class="card">
+                    <div class="card-icon"
+                        style="background: linear-gradient(135deg, var(--color-secondary-100), var(--color-secondary-200));">
+                        🖼️
+                    </div>
+                    <h3 class="card-title">Galería Interactiva</h3>
+                    <p class="card-content">
+                        Componente de carrusel de imágenes controlado por JavaScript con transiciones y controles
+                        manuales.
+                    </p>
+                    <a href="galeria.html" class="text-primary-600 dark:text-primary-400 font-semibold hover:underline">
+                        Ver Galería &rarr;
+                    </a>
+                </div>
+
+                <!-- Tarjeta: Utilidades -->
+                <div class="card">
+                    <div class="card-icon"
+                        style="background: linear-gradient(135deg, var(--color-secondary-300), var(--color-secondary-400));">
+                        🧮
+                    </div>
+                    <h3 class="card-title">Utilidades</h3>
+                    <p class="card-content">
+                        Herramientas prácticas como el cambio de tema (Modo Oscuro) y una calculadora funcional.
+                    </p>
+                    <a href="utilidades.html"
+                        class="text-primary-600 dark:text-primary-400 font-semibold hover:underline">
+                        Probar Útiles &rarr;
+                    </a>
+                </div>
+
+                <!-- Tarjeta: Contacto -->
+                <div class="card">
+                    <div class="card-icon"
+                        style="background: linear-gradient(135deg, var(--color-secondary-500), var(--color-secondary-600));">
+                        ✉️
+                    </div>
+                    <h3 class="card-title">Contacto</h3>
+                    <p class="card-content">
+                        Formulario de contacto secundario con validación de correo electrónico y manejo de eventos.
+                    </p>
+                    <a href="contacto.html"
+                        class="text-primary-600 dark:text-primary-400 font-semibold hover:underline">
+                        Contactar &rarr;
+                    </a>
+                </div>
+            </div>
+
+            <!-- Estadísticas -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">4+</div>
+                    <div class="text-sm font-semibold">Funcionalidades</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">100%</div>
+                    <div class="text-sm font-semibold">Responsive</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">5</div>
+                    <div class="text-sm font-semibold">Páginas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">∞</div>
+                    <div class="text-sm font-semibold">Interactividad</div>
+                </div>
+            </div>
+
+            <!-- Testimonios (Carrusel simple) -->
+            <div class="testimonial-slider" id="testimonial-carousel">
+                <div class="testimonial-slide">
+                    <p class="testimonial-text">
+                        "Excelente implementación de funcionalidades JavaScript. El manejo del DOM es impecable."
+                    </p>
+                    <p class="testimonial-author">- Prof. Desarrollo Web</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Sección de características técnicas -->
+        <section class="bg-neutral-100 dark:bg-neutral-800 py-16">
+            <div class="container">
+                <h2 class="text-2xl font-bold text-center text-neutral-900 dark:text-white mb-8">
+                    Tecnologías Utilizadas
+                </h2>
+                <div class="flex flex-wrap justify-center gap-6">
+                    <div class="tech-chip">HTML5</div>
+                    <div class="tech-chip">CSS3</div>
+                    <div class="tech-chip">JavaScript ES6+</div>
+                    <div class="tech-chip">LocalStorage API</div>
+                    <div class="tech-chip">Responsive Design</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="text-xl font-bold text-primary-600 dark:text-primary-500">WebMaster</span>
+                    <p class="text-sm text-neutral-500 mt-2">Desarrollo Web - Clase 2023</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">GitHub</a>
+                    <a href="#" class="footer-link">LinkedIn</a>
+                </div>
+            </div>
+            <div class="footer-copyright">
+                &copy; 2023 Proyecto Web. Todos los derechos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Personalizado -->
+    <script src="../JS/script.js"></script>
+
+    <!-- Script adicional para esta página -->
+    <script>
+        // Función para mostrar más características al hacer clic
+        document.addEventListener('DOMContentLoaded', function () {
+            // Ejemplo de funcionalidad específica de index.html
+            const testimonialSlide = document.querySelector('.testimonial-slide');
+            const testimonials = [
+                {
+                    text: "Excelente implementación de funcionalidades JavaScript. El manejo del DOM es impecable.",
+                    author: "Prof. Desarrollo Web"
+                },
+                {
+                    text: "El diseño responsive y la paleta de colores son muy profesionales. Buen trabajo!",
+                    author: "Diseñador UI/UX"
+                },
+                {
+                    text: "La implementación del modo oscuro y la calculadora demuestran un buen dominio de JS.",
+                    author: "Instructor Frontend"
+                }
+            ];
+
+            let currentTestimonial = 0;
+
+            // Rotar testimonios cada 5 segundos
+            setInterval(() => {
+                currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+                testimonialSlide.innerHTML = `
+                    <p class="testimonial-text">"${testimonials[currentTestimonial].text}"</p>
+                    <p class="testimonial-author">- ${testimonials[currentTestimonial].author}</p>
+                `;
+            }, 5000);
+        });
+    </script>
+
+    <style>
+        .tech-chip {
+            background: linear-gradient(135deg, var(--color-primary-600), var(--color-primary-800));
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: transform 0.2s ease;
+        }
+
+        .tech-chip:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-lg {
+            padding: 0.75rem 2rem;
+            font-size: 1rem;
+        }
+    </style>
+    <script src="../JS/script.js"></script>
+</body>
+
+</html>

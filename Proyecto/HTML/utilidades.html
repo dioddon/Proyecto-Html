@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centro de Utilidades | Proyecto Web Interactivo</title>
+
+    <!-- Fuente Google: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="../CSS/estilos.css">
+
+    <!-- Sistema de Tema Unificado -->
+    <script src="../JS/tema.js"></script>
+
+    <style>
+        /* Estilos específicos para utilidades.html */
+        .utilities-grid {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: 1fr;
+        }
+
+        @media (min-width: 768px) {
+            .utilities-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .calculadora {
+            background-color: var(--color-neutral-100);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--color-neutral-200);
+            max-width: 100%;
+        }
+
+        .dark .calculadora {
+            background-color: var(--color-neutral-800);
+            border-color: var(--color-neutral-700);
+        }
+
+        .calculadora h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-neutral-900);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .dark .calculadora h1 {
+            color: var(--color-neutral-100);
+        }
+
+        #pantalla {
+            width: 100%;
+            height: 60px;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            text-align: right;
+            padding: 0 1rem;
+            border-radius: 0.5rem;
+            border: 2px solid var(--color-neutral-300);
+            background-color: white;
+            color: var(--color-neutral-900);
+            font-family: 'Courier New', monospace;
+        }
+
+        .dark #pantalla {
+            background-color: var(--color-neutral-900);
+            border-color: var(--color-neutral-600);
+            color: white;
+        }
+
+        .botones {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+        }
+
+        .botones button {
+            height: 50px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            background: var(--color-neutral-200);
+            color: var(--color-neutral-900);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .dark .botones button {
+            background: var(--color-neutral-700);
+            color: var(--color-neutral-200);
+        }
+
+        .botones button:hover {
+            background-color: var(--color-neutral-300);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .dark .botones button:hover {
+            background-color: var(--color-neutral-600);
+        }
+
+        /* Estilos para botones especiales */
+        .botones button:nth-child(1),
+        .botones button:nth-child(2) {
+            background-color: var(--color-error-500);
+            color: white;
+        }
+
+        .dark .botones button:nth-child(1),
+        .dark .botones button:nth-child(2) {
+            background-color: var(--color-error-600);
+        }
+
+        .botones button:nth-child(1):hover,
+        .botones button:nth-child(2):hover {
+            background-color: var(--color-error-600);
+            transform: translateY(-2px);
+        }
+
+        .dark .botones button:nth-child(1):hover,
+        .dark .botones button:nth-child(2):hover {
+            background-color: var(--color-error-700);
+        }
+
+        /* Botones de operaciones básicas */
+        .botones button:nth-child(4),
+        .botones button:nth-child(8),
+        .botones button:nth-child(12),
+        .botones button:nth-child(16),
+        .botones button:nth-child(20) {
+            background-color: var(--color-primary-600);
+            color: white;
+        }
+
+        .dark .botones button:nth-child(4),
+        .dark .botones button:nth-child(8),
+        .dark .botones button:nth-child(12),
+        .dark .botones button:nth-child(16),
+        .dark .botones button:nth-child(20) {
+            background-color: var(--color-primary-500);
+        }
+
+        .botones button:nth-child(4):hover,
+        .botones button:nth-child(8):hover,
+        .botones button:nth-child(12):hover,
+        .botones button:nth-child(16):hover,
+        .botones button:nth-child(20):hover {
+            background-color: var(--color-primary-700);
+        }
+
+        .dark .botones button:nth-child(4):hover,
+        .dark .botones button:nth-child(8):hover,
+        .dark .botones button:nth-child(12):hover,
+        .dark .botones button:nth-child(16):hover,
+        .dark .botones button:nth-child(20):hover {
+            background-color: var(--color-primary-600);
+        }
+
+        /* Botones de funciones científicas (primera fila después de los botones especiales) */
+        .botones button:nth-child(5),
+        .botones button:nth-child(6),
+        .botones button:nth-child(7),
+        .botones button:nth-child(25),
+        .botones button:nth-child(26),
+        .botones button:nth-child(27),
+        .botones button:nth-child(28) {
+            background-color: var(--color-secondary-500);
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .dark .botones button:nth-child(5),
+        .dark .botones button:nth-child(6),
+        .dark .botones button:nth-child(7),
+        .dark .botones button:nth-child(25),
+        .dark .botones button:nth-child(26),
+        .dark .botones button:nth-child(27),
+        .dark .botones button:nth-child(28) {
+            background-color: var(--color-secondary-600);
+        }
+
+        .botones button:nth-child(5):hover,
+        .botones button:nth-child(6):hover,
+        .botones button:nth-child(7):hover,
+        .botones button:nth-child(25):hover,
+        .botones button:nth-child(26):hover,
+        .botones button:nth-child(27):hover,
+        .botones button:nth-child(28):hover {
+            background-color: var(--color-secondary-600);
+        }
+
+        .dark .botones button:nth-child(5):hover,
+        .dark .botones button:nth-child(6):hover,
+        .dark .botones button:nth-child(7):hover,
+        .dark .botones button:nth-child(25):hover,
+        .dark .botones button:nth-child(26):hover,
+        .dark .botones button:nth-child(27):hover,
+        .dark .botones button:nth-child(28):hover {
+            background-color: var(--color-secondary-700);
+        }
+
+        .botones button:active {
+            transform: scale(0.95);
+        }
+
+        .theme-status-card {
+            background: var(--color-neutral-100);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dark .theme-status-card {
+            background: var(--color-neutral-700);
+        }
+
+        .theme-status-label {
+            font-weight: 600;
+            color: var(--color-neutral-700);
+        }
+
+        .dark .theme-status-label {
+            color: var(--color-neutral-200);
+        }
+
+        .theme-status-value {
+            font-weight: 700;
+            font-size: 1.125rem;
+            color: var(--color-primary-600);
+        }
+
+        .dark .theme-status-value {
+            color: var(--color-primary-400);
+        }
+
+        .theme-switch-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--color-primary-600), var(--color-primary-800));
+            color: white;
+            border: none;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
+        }
+
+        .theme-switch-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            background: linear-gradient(135deg, var(--color-primary-700), var(--color-primary-900));
+        }
+
+        .theme-switch-btn:active {
+            transform: translateY(0);
+        }
+
+        .theme-icon {
+            font-size: 1.5rem;
+        }
+
+        .theme-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .theme-option {
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: 2px solid var(--color-neutral-300);
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .dark .theme-option {
+            background: var(--color-neutral-800);
+            border-color: var(--color-neutral-600);
+            color: var(--color-neutral-200);
+        }
+
+        .theme-option:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .theme-option.active {
+            border-color: var(--color-primary-600);
+            background: var(--color-primary-50);
+            color: var(--color-primary-700);
+        }
+
+        .dark .theme-option.active {
+            border-color: var(--color-primary-400);
+            background: var(--color-primary-900);
+            color: var(--color-primary-200);
+        }
+
+        .converter-form {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: end;
+        }
+
+        @media (max-width: 640px) {
+            .converter-form {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .converter-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .converter-label {
+            font-weight: 600;
+            color: var(--color-neutral-700);
+            font-size: 0.875rem;
+        }
+
+        .dark .converter-label {
+            color: var(--color-neutral-200);
+        }
+
+        .converter-input {
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: 2px solid var(--color-neutral-300);
+            background: white;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .dark .converter-input {
+            background: var(--color-neutral-800);
+            border-color: var(--color-neutral-600);
+            color: white;
+        }
+
+        .converter-input:focus {
+            outline: none;
+            border-color: var(--color-primary-500);
+            box-shadow: 0 0 0 3px rgba(106, 0, 244, 0.1);
+        }
+
+        .converter-select {
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: 2px solid var(--color-neutral-300);
+            background: white;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .dark .converter-select {
+            background: var(--color-neutral-800);
+            border-color: var(--color-neutral-600);
+            color: white;
+        }
+
+        .converter-arrow {
+            text-align: center;
+            padding: 0 1rem;
+            font-size: 1.5rem;
+            color: var(--color-primary-600);
+        }
+
+        .dark .converter-arrow {
+            color: var(--color-primary-400);
+        }
+
+        .converter-result {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--color-neutral-100);
+            border-radius: 0.75rem;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--color-primary-600);
+        }
+
+        .dark .converter-result {
+            background: var(--color-neutral-700);
+            color: var(--color-primary-400);
+        }
+
+        .quick-tools {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .tool-card {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            border: 1px solid var(--color-neutral-200);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .dark .tool-card {
+            background: var(--color-neutral-800);
+            border-color: var(--color-neutral-700);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--color-primary-500);
+        }
+
+        .tool-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-title {
+            font-weight: 600;
+            color: var(--color-neutral-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .dark .tool-title {
+            color: var(--color-neutral-100);
+        }
+
+        .tool-description {
+            font-size: 0.875rem;
+            color: var(--color-neutral-600);
+        }
+
+        .dark .tool-description {
+            color: var(--color-neutral-400);
+        }
+
+        .calculator-memory {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .memory-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: 2px solid var(--color-neutral-300);
+            background: white;
+            color: var(--color-neutral-700);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dark .memory-btn {
+            background: var(--color-neutral-800);
+            border-color: var(--color-neutral-600);
+            color: var(--color-neutral-300);
+        }
+
+        .memory-btn:hover {
+            background: var(--color-primary-50);
+            border-color: var(--color-primary-500);
+            color: var(--color-primary-700);
+        }
+
+        .dark .memory-btn:hover {
+            background: var(--color-primary-900);
+            border-color: var(--color-primary-400);
+            color: var(--color-primary-200);
+        }
+
+        .history-section {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--color-neutral-200);
+        }
+
+        .dark .history-section {
+            border-top-color: var(--color-neutral-700);
+        }
+
+        .history-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 0.5rem;
+        }
+
+        .history-item {
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            background: var(--color-neutral-100);
+            margin-bottom: 0.5rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+        }
+
+        .dark .history-item {
+            background: var(--color-neutral-700);
+        }
+
+        .empty-history {
+            text-align: center;
+            color: var(--color-neutral-500);
+            font-style: italic;
+            padding: 1rem;
+        }
+
+        .dark .empty-history {
+            color: var(--color-neutral-400);
+        }
+    </style>
+</head>
+
+<body class="bg-neutral-50 text-neutral-900">
+    <!-- Navegación Principal -->
+    <header class="site-header">
+        <nav class="container">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo / Título -->
+                <a href="index.html" class="logo">
+                    <span class="logo-primary">Web</span><span class="logo-dark">Master</span>
+                </a>
+
+                <!-- Menú Desktop -->
+                <div class="nav-desktop">
+                    <a href="index.html" class="nav-link">Inicio</a>
+                    <a href="gestion.html" class="nav-link">Gestión</a>
+                    <a href="galeria.html" class="nav-link">Galería</a>
+                    <a href="utilidades.html" class="nav-link active">Utilidades</a>
+                    <a href="contacto.html" class="btn btn-primary">Contacto</a>
+
+                    <!-- Botón Dark Mode Desktop -->
+                    <button id="theme-toggle" class="btn btn-outline" data-theme-toggle aria-label="Cambiar tema">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                </div>
+
+                <!-- Botón Menú Móvil -->
+                <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Abrir menú">
+                    ☰
+                </button>
+            </div>
+
+            <!-- Menú Móvil (Oculto por defecto) -->
+            <div id="mobile-menu" class="mobile-menu hidden">
+                <a href="index.html" class="mobile-link">Inicio</a>
+                <a href="gestion.html" class="mobile-link">Gestión</a>
+                <a href="galeria.html" class="mobile-link">Galería</a>
+                <a href="utilidades.html" class="mobile-link active">Utilidades</a>
+                <a href="contacto.html" class="mobile-link">Contacto</a>
+                <button id="theme-toggle-mobile" class="btn btn-outline w-full mt-4" data-theme-toggle>
+                    Cambiar Tema <span class="theme-icon">🌓</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="container py-12">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-neutral-900 dark:text-white mb-4">
+                Herramientas y Utilidades
+            </h1>
+            <p class="text-lg text-neutral-600 dark:text-neutral-400 max-w-3xl mx-auto">
+                Esta sección agrupa herramientas interactivas, incluyendo una calculadora funcional y el control manual
+                del
+                tema de la interfaz.
+            </p>
+        </div>
+
+        <div class="utilities-grid">
+            <!-- Columna 1: Calculadora y Herramientas -->
+            <div class="calculadora">
+                <h1>Calculadora Científica</h1>
+                <input type="text" name="" id="pantalla" readonly>
+                <div class="botones">
+                    <!--fila 1-->
+                    <button onclick="limpiar()">C</button>
+                    <button onclick="borrar()">⌫</button>
+                    <button onclick="agregar('(')">(</button>
+                    <button onclick="agregar(')')">)</button>
+                    <!--Fila 2-->
+                    <button onclick="func('sin')">sin</button>
+                    <button onclick="func('cos')">cos</button>
+                    <button onclick="func('tan')">tan</button>
+                    <button onclick="agregar('/')">÷</button>
+                    <!--Fila 3-->
+                    <button onclick="agregar('7')">7</button>
+                    <button onclick="agregar('8')">8</button>
+                    <button onclick="agregar('9')">9</button>
+                    <button onclick="agregar('*')">×</button>
+                    <!--Fila 4-->
+                    <button onclick="agregar('4')">4</button>
+                    <button onclick="agregar('5')">5</button>
+                    <button onclick="agregar('6')">6</button>
+                    <button onclick="agregar('-')">−</button>
+                    <!--Fila 5-->
+                    <button onclick="agregar('1')">1</button>
+                    <button onclick="agregar('2')">2</button>
+                    <button onclick="agregar('3')">3</button>
+                    <button onclick="agregar('+')">+</button>
+                    <!--Fila 6-->
+                    <button onclick="agregar('0')">0</button>
+                    <button onclick="agregar('.')">.</button>
+                    <button onclick="func('sqrt')">√</button>
+                    <button onclick="calcular()">=</button>
+                    <!--Fila 7-->
+                    <button onclick="func('log')">log</button>
+                    <button onclick="func('ln')">ln</button>
+                    <button onclick="func('exp')">exp</button>
+                    <button onclick="func('pow')">x²</button>
+                </div>
+
+            </div>
+
+            <!-- Columna 2: Control de Tema y Herramientas Rápidas -->
+            <div>
+                <!-- Control de Tema -->
+                <section class="theme-control-section">
+                    <h2 class="text-2xl font-bold text-neutral-900 dark:text-white mb-6">
+                        Control de Tema
+                    </h2>
+                    <p class="text-neutral-600 dark:text-neutral-400 mb-6">
+                        Alterna el esquema de colores de la interfaz entre el modo claro y el modo oscuro. Tu
+                        preferencia se
+                        guardará automáticamente.
+                    </p>
+
+                    <div class="theme-status-card">
+                        <span class="theme-status-label">Estado Actual:</span>
+                        <span id="theme-status" class="theme-status-value">Claro</span>
+                    </div>
+
+                    <button id="theme-switch-main" class="theme-switch-btn">
+                        <span id="switch-icon" class="theme-icon">🌓</span>
+                        <span>Alternar Tema</span>
+                    </button>
+
+                    <div class="theme-options">
+                        <button class="theme-option active" data-theme="auto">
+                            Auto
+                        </button>
+                        <button class="theme-option" data-theme="light">
+                            Claro
+                        </button>
+                        <button class="theme-option" data-theme="dark">
+                            Oscuro
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Herramientas Rápidas -->
+                <section class="converter-section">
+                    <h2 class="text-2xl font-bold text-neutral-900 dark:text-white mb-6">
+                        Herramientas Rápidas
+                    </h2>
+
+                    <div class="quick-tools">
+                        <!-- Contador de Caracteres -->
+                        <div class="tool-card" id="character-counter-tool">
+                            <div class="tool-icon">📝</div>
+                            <h3 class="tool-title">Contador de Caracteres</h3>
+                            <p class="tool-description">
+                                Cuenta palabras, caracteres y espacios
+                            </p>
+                        </div>
+
+                        <!-- Generador de Colores -->
+                        <div class="tool-card" id="color-generator-tool">
+                            <div class="tool-icon">🎨</div>
+                            <h3 class="tool-title">Generador de Colores</h3>
+                            <p class="tool-description">
+                                Genera paletas de colores aleatorias
+                            </p>
+                        </div>
+
+                        <!-- Temporizador -->
+                        <div class="tool-card" id="timer-tool">
+                            <div class="tool-icon">⏱️</div>
+                            <h3 class="tool-title">Temporizador</h3>
+                            <p class="tool-description">
+                                Temporizador y cronómetro simple
+                            </p>
+                        </div>
+
+                        <!-- Generador de Contraseñas -->
+                        <div class="tool-card" id="password-generator-tool">
+                            <div class="tool-icon">🔐</div>
+                            <h3 class="tool-title">Generador de Contraseñas</h3>
+                            <p class="tool-description">
+                                Crea contraseñas seguras aleatorias
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Área de Herramientas -->
+                    <div id="tools-area" class="mt-6">
+                        <!-- Aquí se cargarán las herramientas seleccionadas -->
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="text-xl font-bold text-primary-600 dark:text-primary-500">WebMaster</span>
+                    <p class="text-sm text-neutral-500 mt-2">Desarrollo Web - Clase 2023</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">GitHub</a>
+                    <a href="#" class="footer-link">LinkedIn</a>
+                </div>
+            </div>
+            <div class="footer-copyright">
+                &copy; 2023 Proyecto Web. Todos los derechos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Personalizado -->
+    <script src="../JS/script.js"></script>
+
+    <!-- Script específico para utilidades -->
+    <script>
+        // Variables de la calculadora
+        const pantalla = document.getElementById("pantalla");
+
+        function agregar(valor) {
+            pantalla.value += valor;
+        }
+
+        function limpiar() {
+            pantalla.value = "";
+        }
+
+        function borrar() {
+            pantalla.value = pantalla.value.slice(0, -1);
+        }
+
+        function func(tipo) {
+            let n = parseFloat(pantalla.value);
+
+            if (isNaN(n)) {
+                pantalla.value = "Error";
+                return;
+            }
+
+            switch (tipo) {
+                case "sin":
+                    pantalla.value = Math.sin(n * Math.PI / 180);
+                    break;
+                case "cos":
+                    pantalla.value = Math.cos(n * Math.PI / 180);
+                    break;
+                case "tan":
+                    pantalla.value = Math.tan(n * Math.PI / 180);
+                    break;
+                case "log":
+                    pantalla.value = n > 0 ? Math.log10(n) : "Error";
+                    break;
+                case "ln":
+                    pantalla.value = n > 0 ? Math.log(n) : "Error";
+                    break;
+                case "sqrt":
+                    pantalla.value = n >= 0 ? Math.sqrt(n) : "Error";
+                    break;
+                case "exp":
+                    pantalla.value = Math.exp(n);
+                    break;
+                case "pow":
+                    pantalla.value = Math.pow(n, 2);
+                    break;
+                default:
+                    pantalla.value = "Función no reconocida";
+            }
+        }
+
+        function calcular() {
+            try {
+                pantalla.value = eval(pantalla.value);
+            } catch (error) {
+                pantalla.value = "Error";
+            }
+        }
+
+        // ============ SISTEMA DE TEMA CORREGIDO ============
+
+        // Configurar controles de tema - VERSIÓN SIMPLIFICADA
+        function setupThemeControls() {
+            console.log("Configurando controles de tema...");
+
+            const themeSwitchBtn = document.getElementById('theme-switch-main');
+            const themeStatus = document.getElementById('theme-status');
+            const switchIcon = document.getElementById('switch-icon');
+            const themeOptions = document.querySelectorAll('.theme-option');
+
+            // Esperar a que tema.js esté disponible
+            function waitForTemaJS() {
+                return new Promise((resolve) => {
+                    if (window.sistemaTema) {
+                        resolve(window.sistemaTema);
+                    } else {
+                        const checkInterval = setInterval(() => {
+                            if (window.sistemaTema) {
+                                clearInterval(checkInterval);
+                                resolve(window.sistemaTema);
+                            }
+                        }, 100);
+                    }
+                });
+            }
+
+            // Actualizar UI del tema
+            function updateThemeUI() {
+                const isDark = document.documentElement.classList.contains('dark');
+                console.log("Actualizando UI - Modo oscuro:", isDark);
+
+                // Actualizar estado del tema
+                if (themeStatus) {
+                    themeStatus.textContent = isDark ? 'Oscuro' : 'Claro';
+                }
+
+                // Actualizar icono
+                if (switchIcon) {
+                    switchIcon.textContent = isDark ? '🌞' : '🌙';
+                }
+
+                // Actualizar opciones activas
+                const savedTheme = localStorage.getItem('theme') || 'auto';
+                themeOptions.forEach(option => {
+                    option.classList.remove('active');
+                    if (option.dataset.theme === savedTheme) {
+                        option.classList.add('active');
+                    }
+                });
+            }
+
+            // Configurar eventos una vez que tema.js esté listo
+            waitForTemaJS().then((sistemaTema) => {
+                console.log("tema.js detectado:", sistemaTema);
+
+                // Botón principal de alternar
+                if (themeSwitchBtn) {
+                    themeSwitchBtn.addEventListener('click', function () {
+                        sistemaTema.alternarTema();
+                        updateThemeUI();
+                    });
+                    console.log("Botón principal configurado");
+                }
+
+                // Opciones de tema
+                themeOptions.forEach(option => {
+                    option.addEventListener('click', function () {
+                        const theme = this.dataset.theme;
+                        console.log("Cambiando tema a:", theme);
+
+                        if (theme === 'auto') {
+                            sistemaTema.usarPreferenciaSistema();
+                        } else if (theme === 'dark') {
+                            sistemaTema.cambiarAModoOscuro();
+                        } else {
+                            sistemaTema.cambiarAModoClaro();
+                        }
+
+                        updateThemeUI();
+                    });
+                });
+
+                // Actualizar UI inicialmente
+                updateThemeUI();
+
+                // Actualizar UI cuando tema.js cambie el tema
+                document.addEventListener('themeChanged', updateThemeUI);
+
+                // También actualizar periódicamente por si acaso
+                const updateInterval = setInterval(updateThemeUI, 1000);
+
+                // Limpiar intervalo cuando se cierre la página
+                window.addEventListener('beforeunload', () => {
+                    clearInterval(updateInterval);
+                });
+            }).catch(() => {
+                console.warn("tema.js no encontrado, usando sistema alternativo");
+                setupFallbackThemeSystem();
+            });
+
+            // Sistema alternativo si tema.js no existe
+            function setupFallbackThemeSystem() {
+                console.log("Usando sistema de tema alternativo");
+
+                function toggleTheme() {
+                    const html = document.documentElement;
+                    const isDark = html.classList.contains('dark');
+
+                    if (isDark) {
+                        html.classList.remove('dark');
+                        localStorage.setItem('theme', 'light');
+                    } else {
+                        html.classList.add('dark');
+                        localStorage.setItem('theme', 'dark');
+                    }
+
+                    updateThemeUI();
+                }
+
+                function setTheme(theme) {
+                    const html = document.documentElement;
+
+                    if (theme === 'auto') {
+                        localStorage.removeItem('theme');
+                        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                        if (prefersDark) {
+                            html.classList.add('dark');
+                        } else {
+                            html.classList.remove('dark');
+                        }
+                    } else if (theme === 'dark') {
+                        html.classList.add('dark');
+                        localStorage.setItem('theme', 'dark');
+                    } else {
+                        html.classList.remove('dark');
+                        localStorage.setItem('theme', 'light');
+                    }
+
+                    updateThemeUI();
+                }
+
+                // Configurar eventos
+                if (themeSwitchBtn) {
+                    themeSwitchBtn.addEventListener('click', toggleTheme);
+                }
+
+                themeOptions.forEach(option => {
+                    option.addEventListener('click', function () {
+                        setTheme(this.dataset.theme);
+                    });
+                });
+
+                // Cargar tema inicial
+                const savedTheme = localStorage.getItem('theme');
+                if (savedTheme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                } else if (savedTheme === 'light') {
+                    document.documentElement.classList.remove('dark');
+                }
+
+                updateThemeUI();
+            }
+        }
+
+        // Inicializar controles de tema cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', setupThemeControls);
+
+        // También inicializar si el DOM ya está listo
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            setTimeout(setupThemeControls, 100);
+        }
+        // Configurar conversor de unidades (si existe)
+        function setupConverter() {
+            const fromInput = document.getElementById('converter-from');
+            if (fromInput) {
+                // Tu código del conversor aquí...
+                console.log("Conversor configurado");
+            }
+        }
+
+        // Configurar herramientas rápidas
+        function setupQuickTools() {
+            // Tu código de herramientas rápidas aquí...
+            console.log("Herramientas rápidas configuradas");
+        }
+
+        // ============ INICIALIZACIÓN ============
+
+        // Inicializar todo cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log("DOM cargado - Inicializando utilidades...");
+
+            // Inicializar controles de tema
+            setupThemeControls();
+
+            // Inicializar otras funcionalidades
+            setupConverter();
+            setupQuickTools();
+
+            // Configurar menú móvil si existe
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', function () {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+
+            console.log("Utilidades inicializadas correctamente");
+        });
+
+        // También inicializar si el DOM ya está listo
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function () {
+                setupThemeControls();
+            });
+        } else {
+            // DOM ya está listo
+            setTimeout(setupThemeControls, 100);
+        }
+
+    </script>
+</body>
+
+</html>
