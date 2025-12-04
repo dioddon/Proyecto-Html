@@ -1,0 +1,1858 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto y Ubicación | Proyecto Web Interactivo</title>
+
+    <!-- Fuente Google: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="../CSS/estilos.css">
+
+    <style>
+        /* Estilos específicos para contacto.html */
+        .contact-grid {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: 1fr;
+        }
+
+        @media (min-width: 1024px) {
+            .contact-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .contact-form-section {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--color-neutral-200);
+        }
+
+        .dark .contact-form-section {
+            background: var(--color-neutral-800);
+            border-color: var(--color-neutral-700);
+        }
+
+        .map-section {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--color-neutral-200);
+            height: fit-content;
+        }
+
+        .dark .map-section {
+            background: var(--color-neutral-800);
+            border-color: var(--color-neutral-700);
+        }
+
+        .contact-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .info-card {
+            background: var(--color-neutral-100);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--color-primary-600);
+        }
+
+        .dark .info-card {
+            background: var(--color-neutral-700);
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .info-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--color-primary-600);
+        }
+
+        .info-title {
+            font-weight: 600;
+            color: var(--color-neutral-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .dark .info-title {
+            color: var(--color-neutral-100);
+        }
+
+        .info-content {
+            color: var(--color-neutral-600);
+            font-size: 0.95rem;
+        }
+
+        .dark .info-content {
+            color: var(--color-neutral-400);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 640px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .contact-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--color-neutral-300);
+            border-radius: 0.5rem;
+            background: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .dark .contact-input {
+            background: var(--color-neutral-700);
+            border-color: var(--color-neutral-600);
+            color: white;
+        }
+
+        .contact-input:focus {
+            outline: none;
+            border-color: var(--color-primary-500);
+            box-shadow: 0 0 0 3px rgba(106, 0, 244, 0.1);
+        }
+
+        .contact-textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--color-neutral-300);
+            border-radius: 0.5rem;
+            background: white;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 150px;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .dark .contact-textarea {
+            background: var(--color-neutral-700);
+            border-color: var(--color-neutral-600);
+            color: white;
+        }
+
+        .contact-textarea:focus {
+            outline: none;
+            border-color: var(--color-primary-500);
+            box-shadow: 0 0 0 3px rgba(106, 0, 244, 0.1);
+        }
+
+        .contact-select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--color-neutral-300);
+            border-radius: 0.5rem;
+            background: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dark .contact-select {
+            background: var(--color-neutral-700);
+            border-color: var(--color-neutral-600);
+            color: white;
+        }
+
+        .contact-select:focus {
+            outline: none;
+            border-color: var(--color-primary-500);
+            box-shadow: 0 0 0 3px rgba(106, 0, 244, 0.1);
+        }
+
+        .contact-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+
+        .checkbox-input {
+            margin-top: 0.25rem;
+            width: 1.25rem;
+            height: 1.25rem;
+            accent-color: var(--color-primary-600);
+        }
+
+        .checkbox-label {
+            color: var(--color-neutral-700);
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .dark .checkbox-label {
+            color: var(--color-neutral-300);
+        }
+
+        .checkbox-label a {
+            color: var(--color-primary-600);
+            text-decoration: underline;
+        }
+
+        .contact-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--color-primary-600), var(--color-primary-800));
+            color: white;
+            border: none;
+            border-radius: 0.75rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .contact-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            background: linear-gradient(135deg, var(--color-primary-700), var(--color-primary-900));
+        }
+
+        .contact-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .map-container {
+            width: 100%;
+            height: 400px;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .map-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--color-neutral-100), var(--color-neutral-200));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-neutral-600);
+        }
+
+        .dark .map-placeholder {
+            background: linear-gradient(135deg, var(--color-neutral-800), var(--color-neutral-900));
+            color: var(--color-neutral-400);
+        }
+
+        .map-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .location-info {
+            background: var(--color-neutral-100);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .dark .location-info {
+            background: var(--color-neutral-700);
+        }
+
+        .location-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--color-neutral-200);
+        }
+
+        .dark .location-item {
+            border-bottom-color: var(--color-neutral-600);
+        }
+
+        .location-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .location-icon {
+            font-size: 1.25rem;
+            color: var(--color-primary-600);
+            min-width: 1.5rem;
+        }
+
+        .location-content {
+            flex: 1;
+        }
+
+        .location-title {
+            font-weight: 600;
+            color: var(--color-neutral-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .dark .location-title {
+            color: var(--color-neutral-100);
+        }
+
+        .location-text {
+            color: var(--color-neutral-600);
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .dark .location-text {
+            color: var(--color-neutral-400);
+        }
+
+        .contact-progress {
+            height: 0.5rem;
+            background: var(--color-neutral-200);
+            border-radius: 0.25rem;
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+
+        .dark .contact-progress {
+            background: var(--color-neutral-700);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-primary-600), var(--color-primary-800));
+            border-radius: 0.25rem;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .form-status {
+            text-align: center;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin-top: 1rem;
+            display: none;
+            font-weight: 600;
+        }
+
+        .status-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            display: block;
+        }
+
+        .status-error {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            display: block;
+        }
+
+        .status-warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            display: block;
+        }
+
+        .contact-social {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--color-neutral-100);
+            border-radius: 2rem;
+            color: var(--color-neutral-700);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .dark .social-link {
+            background: var(--color-neutral-700);
+            color: var(--color-neutral-300);
+        }
+
+        .social-link:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            background: var(--color-primary-600);
+            color: white;
+        }
+
+        .social-icon {
+            font-size: 1.25rem;
+        }
+
+        .faq-section {
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 2px solid var(--color-neutral-200);
+        }
+
+        .dark .faq-section {
+            border-top-color: var(--color-neutral-700);
+        }
+
+        .faq-grid {
+            display: grid;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .faq-item {
+            background: var(--color-neutral-100);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .dark .faq-item {
+            background: var(--color-neutral-700);
+        }
+
+        .faq-item:hover {
+            border-left-color: var(--color-primary-600);
+            transform: translateX(5px);
+        }
+
+        .faq-item.active {
+            border-left-color: var(--color-primary-600);
+            background: var(--color-primary-50);
+        }
+
+        .dark .faq-item.active {
+            background: var(--color-primary-900);
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--color-neutral-900);
+        }
+
+        .dark .faq-question {
+            color: var(--color-neutral-100);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            color: var(--color-neutral-600);
+            transition: max-height 0.3s ease;
+            margin-top: 0;
+        }
+
+        .dark .faq-answer {
+            color: var(--color-neutral-400);
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            margin-top: 1rem;
+        }
+
+        .faq-toggle {
+            font-size: 1.5rem;
+            color: var(--color-primary-600);
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-toggle {
+            transform: rotate(45deg);
+        }
+
+        .contact-counter {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .counter-item {
+            text-align: center;
+            padding: 1rem;
+            flex: 1;
+        }
+
+        .counter-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary-600);
+            line-height: 1;
+        }
+
+        .counter-label {
+            font-size: 0.875rem;
+            color: var(--color-neutral-600);
+            margin-top: 0.5rem;
+        }
+
+        .dark .counter-label {
+            color: var(--color-neutral-400);
+        }
+
+        .map-controls {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .map-control-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--color-neutral-300);
+            border-radius: 0.5rem;
+            background: white;
+            color: var(--color-neutral-700);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dark .map-control-btn {
+            background: var(--color-neutral-700);
+            border-color: var(--color-neutral-600);
+            color: var(--color-neutral-300);
+        }
+
+        .map-control-btn:hover {
+            background: var(--color-primary-50);
+            border-color: var(--color-primary-500);
+            color: var(--color-primary-700);
+        }
+
+        .dark .map-control-btn:hover {
+            background: var(--color-primary-900);
+            border-color: var(--color-primary-400);
+            color: var(--color-primary-200);
+        }
+
+        .map-control-btn.active {
+            background: var(--color-primary-600);
+            border-color: var(--color-primary-600);
+            color: white;
+        }
+
+        .dark .map-control-btn.active {
+            background: var(--color-primary-400);
+            border-color: var(--color-primary-400);
+        }
+    </style>
+</head>
+
+<body class="bg-neutral-50 text-neutral-900">
+    <!-- Lógica de tema inicial -->
+    <script>
+        // Inicializar tema al cargar
+        document.addEventListener('DOMContentLoaded', function () {
+            const htmlElement = document.documentElement;
+            const savedTheme = localStorage.getItem('theme');
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+                htmlElement.classList.add('dark');
+                document.body.classList.add('dark');
+            }
+        });
+    </script>
+
+    <!-- Navegación Principal -->
+    <header class="site-header">
+        <nav class="container">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo / Título -->
+                <a href="../Index.html" class="logo">
+                    <span class="logo-primary">Web</span><span class="logo-dark">Master</span>
+                </a>
+
+                <!-- Menú Desktop -->
+                <div class="nav-desktop">
+                    <a href="../Index.html" class="nav-link">Inicio</a>
+                    <a href="gestion.html" class="nav-link">Gestión</a>
+                    <a href="galeria.html" class="nav-link">Galería</a>
+                    <a href="utilidades.html" class="nav-link">Utilidades</a>
+                    <a href="contacto.html" class="nav-link active">Contacto</a>
+
+                    <!-- Botón Dark Mode Desktop -->
+                    <button id="theme-toggle" class="btn btn-outline" data-theme-toggle aria-label="Cambiar tema">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                </div>
+
+                <!-- Botón Menú Móvil -->
+                <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Abrir menú">
+                    ☰
+                </button>
+            </div>
+
+            <!-- Menú Móvil (Oculto por defecto) -->
+            <div id="mobile-menu" class="mobile-menu hidden">
+                <a href="../Index.html" class="mobile-link">Inicio</a>
+                <a href="gestion.html" class="mobile-link">Gestión</a>
+                <a href="galeria.html" class="mobile-link">Galería</a>
+                <a href="utilidades.html" class="mobile-link">Utilidades</a>
+                <a href="contacto.html" class="mobile-link active">Contacto</a>
+                <button id="theme-toggle-mobile" class="btn btn-outline w-full mt-4" data-theme-toggle>
+                    Cambiar Tema <span class="theme-icon">🌓</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="container py-12">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-neutral-900 dark:text-white mb-4">
+                Estamos para Ayudarte
+            </h1>
+            <p class="text-lg text-neutral-600 dark:text-neutral-400 max-w-3xl mx-auto">
+                Envíanos un mensaje a través del formulario o encuéntranos en nuestra ubicación física.
+                Estamos aquí para responder tus preguntas y ayudarte con lo que necesites.
+            </p>
+        </div>
+
+        <!-- Contador de Contactos -->
+        <div class="contact-counter">
+            <div class="counter-item">
+                <div class="counter-number" id="messages-sent">128</div>
+                <div class="counter-label">Mensajes Enviados</div>
+            </div>
+            <div class="counter-item">
+                <div class="counter-number" id="response-time">2</div>
+                <div class="counter-label">Horas de Respuesta</div>
+            </div>
+            <div class="counter-item">
+                <div class="counter-number" id="satisfaction-rate">98%</div>
+                <div class="counter-label">Satisfacción</div>
+            </div>
+        </div>
+
+        <div class="contact-grid">
+            <!-- Columna 1: Formulario de Contacto -->
+            <section class="contact-form-section">
+                <h2 class="text-2xl font-bold text-primary-600 dark:text-primary-400 mb-6">
+                    Formulario de Contacto
+                </h2>
+
+                <form id="contact-form" class="space-y-6">
+                    <!-- Barra de progreso -->
+                    <div class="contact-progress">
+                        <div class="progress-fill" id="form-progress"></div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="contact-name" class="form-label">
+                                Nombre Completo *
+                            </label>
+                            <input type="text" id="contact-name" name="name" required class="contact-input"
+                                placeholder="Tu nombre completo" minlength="2" maxlength="100">
+                            <div class="error-message"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contact-email" class="form-label">
+                                Correo Electrónico *
+                            </label>
+                            <input type="email" id="contact-email" name="email" required class="contact-input"
+                                placeholder="ejemplo@dominio.com">
+                            <div class="error-message"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="contact-phone" class="form-label">
+                                Teléfono
+                            </label>
+                            <input type="tel" id="contact-phone" name="phone" class="contact-input"
+                                placeholder="+52 123 456 7890" pattern="[0-9+\-\s\(\)]{10,}">
+                            <div class="error-message"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contact-subject" class="form-label">
+                                Asunto *
+                            </label>
+                            <select id="contact-subject" name="subject" required class="contact-select">
+                                <option value="">Selecciona un asunto</option>
+                                <option value="consulta">Consulta General</option>
+                                <option value="soporte">Soporte Técnico</option>
+                                <option value="colaboracion">Colaboración</option>
+                                <option value="feedback">Feedback</option>
+                                <option value="otro">Otro</option>
+                            </select>
+                            <div class="error-message"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact-message" class="form-label">
+                            Mensaje *
+                        </label>
+                        <textarea id="contact-message" name="message" required class="contact-textarea"
+                            placeholder="Escribe tu mensaje aquí..." minlength="10" maxlength="1000"></textarea>
+                        <div class="error-message"></div>
+                        <div class="text-right text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+                            <span id="message-char-count">0</span>/1000 caracteres
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact-priority" class="form-label">
+                            Prioridad
+                        </label>
+                        <select id="contact-priority" name="priority" class="contact-select">
+                            <option value="normal">Normal</option>
+                            <option value="alta">Alta</option>
+                            <option value="urgente">Urgente</option>
+                        </select>
+                    </div>
+
+                    <div class="contact-checkbox">
+                        <input type="checkbox" id="contact-newsletter" class="checkbox-input">
+                        <label for="contact-newsletter" class="checkbox-label">
+                            Deseo recibir noticias y actualizaciones por correo electrónico
+                        </label>
+                    </div>
+
+                    <div class="contact-checkbox">
+                        <input type="checkbox" id="contact-terms" class="checkbox-input" required>
+                        <label for="contact-terms" class="checkbox-label">
+                            Acepto los <a href="#" onclick="showTermsModal()">términos y condiciones</a> y la
+                            <a href="#" onclick="showPrivacyModal()">política de privacidad</a> *
+                        </label>
+                        <div class="error-message"></div>
+                    </div>
+
+                    <button type="submit" id="contact-submit" class="contact-btn">
+                        <span id="submit-icon">✉️</span>
+                        <span id="submit-text">Enviar Mensaje</span>
+                    </button>
+
+                    <!-- Mensaje de estado -->
+                    <div id="form-status" class="form-status"></div>
+                </form>
+            </section>
+
+            <!-- Columna 2: Mapa y Ubicación -->
+            <section class="map-section">
+                <h2 class="text-2xl font-bold text-neutral-900 dark:text-white mb-6">
+                    Nuestra Ubicación
+                </h2>
+
+                <!-- Controles del Mapa -->
+                <div class="map-controls">
+                    <button class="map-control-btn active" data-map-type="street">
+                        🗺️ Vista de Calle
+                    </button>
+                    <button class="map-control-btn" data-map-type="satellite">
+                        🛰️ Vista Satelital
+                    </button>
+                    <button class="map-control-btn" data-map-type="hybrid">
+                        🗾 Vista Híbrida
+                    </button>
+                    <button class="map-control-btn" id="locate-me">
+                        📍 Mi Ubicación
+                    </button>
+                </div>
+
+                <!-- Contenedor del Mapa Interactivo -->
+                <div class="map-container">
+                    <div id="interactive-map" class="map-placeholder">
+                        <div class="map-icon">🗺️</div>
+                        <h3 class="text-xl font-semibold mb-2">Mapa Interactivo</h3>
+                        <p class="text-center px-4">Cargando mapa interactivo...</p>
+                        <div class="mt-4">
+                            <button id="load-map" class="btn btn-primary">
+                                Cargar Mapa
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Información de Contacto -->
+                <div class="location-info">
+                    <h3 class="text-lg font-bold text-neutral-900 dark:text-white mb-4">
+                        Información de Contacto
+                    </h3>
+
+                    <div class="location-item">
+                        <div class="location-icon">📍</div>
+                        <div class="location-content">
+                            <div class="location-title">Dirección Principal</div>
+                            <div class="location-text">
+                                1600 Amphitheatre Parkway<br>
+                                Mountain View, CA 94043<br>
+                                Estados Unidos
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="location-item">
+                        <div class="location-icon">📞</div>
+                        <div class="location-content">
+                            <div class="location-title">Teléfono</div>
+                            <div class="location-text">
+                                +1 (650) 253-0000<br>
+                                <small class="text-neutral-500">Lunes a Viernes, 9:00 - 18:00</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="location-item">
+                        <div class="location-icon">✉️</div>
+                        <div class="location-content">
+                            <div class="location-title">Correo Electrónico</div>
+                            <div class="location-text">
+                                contacto@webmaster.com<br>
+                                soporte@webmaster.com
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="location-item">
+                        <div class="location-icon">⏰</div>
+                        <div class="location-content">
+                            <div class="location-title">Horario de Atención</div>
+                            <div class="location-text">
+                                Lunes - Viernes: 9:00 - 18:00<br>
+                                Sábados: 10:00 - 14:00<br>
+                                Domingos: Cerrado
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Información Adicional -->
+        <div class="contact-info-grid">
+            <div class="info-card">
+                <div class="info-icon">🚀</div>
+                <h3 class="info-title">Soporte Técnico</h3>
+                <p class="info-content">
+                    Nuestro equipo de soporte está disponible para ayudarte con cualquier problema técnico.
+                    Tiempo promedio de respuesta: 2 horas.
+                </p>
+            </div>
+
+            <div class="info-card">
+                <div class="info-icon">💼</div>
+                <h3 class="info-title">Colaboraciones</h3>
+                <p class="info-content">
+                    ¿Interesado en colaborar con nosotros? Contáctanos para discutir oportunidades de asociación.
+                </p>
+            </div>
+
+            <div class="info-card">
+                <div class="info-icon">💡</div>
+                <h3 class="info-title">Sugerencias</h3>
+                <p class="info-content">
+                    Tu feedback es importante. Comparte tus ideas para mejorar nuestros servicios.
+                </p>
+            </div>
+
+            <div class="info-card">
+                <div class="info-icon">📋</div>
+                <h3 class="info-title">Presupuestos</h3>
+                <p class="info-content">
+                    Solicita un presupuesto personalizado para tu proyecto. Respondemos en 24 horas.
+                </p>
+            </div>
+        </div>
+
+        <!-- Redes Sociales -->
+        <div class="text-center mt-8">
+            <h3 class="text-xl font-bold text-neutral-900 dark:text-white mb-4">
+                Síguenos en Redes Sociales
+            </h3>
+            <div class="contact-social">
+                <a href="#" class="social-link" target="_blank">
+                    <span class="social-icon">🐦</span>
+                    <span>Twitter</span>
+                </a>
+                <a href="#" class="social-link" target="_blank">
+                    <span class="social-icon">📘</span>
+                    <span>Facebook</span>
+                </a>
+                <a href="#" class="social-link" target="_blank">
+                    <span class="social-icon">📷</span>
+                    <span>Instagram</span>
+                </a>
+                <a href="#" class="social-link" target="_blank">
+                    <span class="social-icon">💼</span>
+                    <span>LinkedIn</span>
+                </a>
+                <a href="#" class="social-link" target="_blank">
+                    <span class="social-icon">📺</span>
+                    <span>YouTube</span>
+                </a>
+                <a href="#" class="social-link" target="_blank">
+                    <span class="social-icon">🐙</span>
+                    <span>GitHub</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Preguntas Frecuentes -->
+        <section class="faq-section">
+            <h2 class="text-3xl font-bold text-center text-neutral-900 dark:text-white mb-6">
+                Preguntas Frecuentes
+            </h2>
+
+            <div class="faq-grid">
+                <div class="faq-item" data-faq="1">
+                    <div class="faq-question">
+                        ¿Cuál es el tiempo de respuesta promedio?
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Nuestro equipo se compromete a responder todas las consultas en un plazo máximo de 24 horas.
+                        Para consultas urgentes, utilizamos el sistema de prioridad que puedes seleccionar en el
+                        formulario.
+                    </div>
+                </div>
+
+                <div class="faq-item" data-faq="2">
+                    <div class="faq-question">
+                        ¿Ofrecen soporte técnico gratuito?
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Sí, ofrecemos soporte técnico básico gratuito para todos nuestros usuarios. Para problemas más
+                        complejos o personalizaciones avanzadas, contamos con planes de soporte premium.
+                    </div>
+                </div>
+
+                <div class="faq-item" data-faq="3">
+                    <div class="faq-question">
+                        ¿Cómo puedo colaborar con el proyecto?
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Aceptamos colaboraciones de desarrolladores, diseñadores y creadores de contenido.
+                        Puedes contactarnos a través del formulario seleccionando "Colaboración" como asunto.
+                    </div>
+                </div>
+
+                <div class="faq-item" data-faq="4">
+                    <div class="faq-question">
+                        ¿Los datos del formulario son seguros?
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Sí, todos los datos enviados a través del formulario están protegidos con encriptación SSL.
+                        No compartimos tu información con terceros y cumplimos con las regulaciones de protección de
+                        datos.
+                    </div>
+                </div>
+
+                <div class="faq-item" data-faq="5">
+                    <div class="faq-question">
+                        ¿Puedo visitar sus oficinas físicamente?
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Sí, nuestras oficinas están abiertas al público durante el horario laboral. Te recomendamos
+                        agendar una cita previa para asegurar la disponibilidad de nuestro equipo.
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="text-xl font-bold text-primary-600 dark:text-primary-500">WebMaster</span>
+                    <p class="text-sm text-neutral-500 mt-2">Desarrollo Web - Clase 2025</p>
+                </div>
+            </div>
+            <div class="footer-copyright">
+                &copy; 2025 Proyecto Web. Todos los derechos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Personalizado -->
+    <script src="../JS/script.js"></script>
+
+    <!-- Script específico para contacto -->
+    <script>
+        // Variables globales
+        let formData = {};
+        let map = null;
+        let userMarker = null;
+        let isMapLoaded = false;
+
+        // Inicializar página
+        document.addEventListener('DOMContentLoaded', function () {
+            // Inicializar formulario
+            setupContactForm();
+
+            // Inicializar FAQ
+            setupFAQ();
+
+            // Inicializar contadores
+            setupCounters();
+
+            // Inicializar controles del mapa
+            setupMapControls();
+
+            // Cargar estadísticas
+            loadContactStats();
+
+            // Configurar validación
+            setupFormValidation();
+        });
+
+        // Configurar formulario de contacto
+        function setupContactForm() {
+            const form = document.getElementById('contact-form');
+            const submitBtn = document.getElementById('contact-submit');
+            const submitText = document.getElementById('submit-text');
+            const submitIcon = document.getElementById('submit-icon');
+            const messageTextarea = document.getElementById('contact-message');
+            const charCount = document.getElementById('message-char-count');
+            const formProgress = document.getElementById('form-progress');
+            const formStatus = document.getElementById('form-status');
+
+            if (!form || !submitBtn) return;
+
+            // Contador de caracteres para el mensaje
+            if (messageTextarea && charCount) {
+                messageTextarea.addEventListener('input', function () {
+                    const length = this.value.length;
+                    charCount.textContent = length;
+
+                    // Cambiar color si se acerca al límite
+                    if (length > 900) {
+                        charCount.style.color = '#ef4444';
+                    } else if (length > 750) {
+                        charCount.style.color = '#f59e0b';
+                    } else {
+                        charCount.style.color = '';
+                    }
+
+                    // Actualizar progreso del formulario
+                    updateFormProgress();
+                });
+
+                // Inicializar contador
+                charCount.textContent = messageTextarea.value.length;
+            }
+
+            // Actualizar progreso del formulario
+            function updateFormProgress() {
+                if (!formProgress) return;
+
+                const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
+                let filledCount = 0;
+
+                inputs.forEach(input => {
+                    if (input.type === 'checkbox') {
+                        if (input.checked) filledCount++;
+                    } else if (input.value.trim() !== '') {
+                        filledCount++;
+                    }
+                });
+
+                const progress = (filledCount / inputs.length) * 100;
+                formProgress.style.width = `${progress}%`;
+            }
+
+            // Escuchar cambios en los campos requeridos
+            form.querySelectorAll('input[required], select[required], textarea[required]').forEach(input => {
+                input.addEventListener('input', updateFormProgress);
+                input.addEventListener('change', updateFormProgress);
+            });
+
+            // Envío del formulario
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault();
+
+                // Validar formulario
+                if (!validateContactForm()) {
+                    showFormStatus('Por favor, corrige los errores en el formulario.', 'error');
+                    return;
+                }
+
+                // Deshabilitar botón y cambiar texto
+                submitBtn.disabled = true;
+                submitText.textContent = 'Enviando...';
+                submitIcon.textContent = '⏳';
+
+                // Simular envío asíncrono
+                try {
+                    // Obtener datos del formulario
+                    const formData = new FormData(form);
+                    const data = Object.fromEntries(formData);
+
+                    // Simular retardo de red
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+
+                    // Simular éxito
+                    const isSuccess = Math.random() > 0.1; // 90% de éxito
+
+                    if (isSuccess) {
+                        // Mostrar éxito
+                        showFormStatus('✅ ¡Mensaje enviado con éxito! Te contactaremos pronto.', 'success');
+
+                        // Actualizar contadores
+                        incrementMessagesSent();
+
+                        // Resetear formulario
+                        form.reset();
+                        updateFormProgress();
+                        charCount.textContent = '0';
+
+                        // Guardar en historial
+                        saveToContactHistory(data);
+                    } else {
+                        // Mostrar error
+                        showFormStatus('❌ Error al enviar el mensaje. Por favor, intenta de nuevo.', 'error');
+                    }
+                } catch (error) {
+                    showFormStatus('❌ Error de conexión. Por favor, verifica tu internet.', 'error');
+                } finally {
+                    // Restaurar botón
+                    submitBtn.disabled = false;
+                    submitText.textContent = 'Enviar Mensaje';
+                    submitIcon.textContent = '✉️';
+
+                    // Ocultar mensaje después de 5 segundos
+                    setTimeout(() => {
+                        formStatus.classList.remove('status-success', 'status-error');
+                        formStatus.style.display = 'none';
+                    }, 5000);
+                }
+            });
+
+            // Inicializar progreso
+            updateFormProgress();
+        }
+
+        // Validar formulario de contacto
+        function validateContactForm() {
+            let isValid = true;
+            const form = document.getElementById('contact-form');
+
+            // Limpiar errores previos
+            form.querySelectorAll('.error-message').forEach(el => {
+                el.textContent = '';
+                el.style.display = 'none';
+            });
+
+            form.querySelectorAll('.contact-input, .contact-select, .contact-textarea').forEach(el => {
+                el.classList.remove('error');
+            });
+
+            // Validar nombre
+            const nameInput = document.getElementById('contact-name');
+            if (nameInput && nameInput.value.trim().length < 2) {
+                showFieldError(nameInput, 'El nombre debe tener al menos 2 caracteres');
+                isValid = false;
+            }
+
+            // Validar email
+            const emailInput = document.getElementById('contact-email');
+            if (emailInput) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(emailInput.value.trim())) {
+                    showFieldError(emailInput, 'Correo electrónico inválido');
+                    isValid = false;
+                }
+            }
+
+            // Validar teléfono (si se proporciona)
+            const phoneInput = document.getElementById('contact-phone');
+            if (phoneInput && phoneInput.value.trim() !== '') {
+                const phoneRegex = /^[0-9+\-\s\(\)]{10,}$/;
+                if (!phoneRegex.test(phoneInput.value.trim())) {
+                    showFieldError(phoneInput, 'Número de teléfono inválido');
+                    isValid = false;
+                }
+            }
+
+            // Validar asunto
+            const subjectInput = document.getElementById('contact-subject');
+            if (subjectInput && subjectInput.value === '') {
+                showFieldError(subjectInput, 'Por favor, selecciona un asunto');
+                isValid = false;
+            }
+
+            // Validar mensaje
+            const messageInput = document.getElementById('contact-message');
+            if (messageInput && messageInput.value.trim().length < 10) {
+                showFieldError(messageInput, 'El mensaje debe tener al menos 10 caracteres');
+                isValid = false;
+            }
+
+            // Validar términos y condiciones
+            const termsInput = document.getElementById('contact-terms');
+            if (termsInput && !termsInput.checked) {
+                const errorElement = termsInput.closest('.contact-checkbox').querySelector('.error-message');
+                if (errorElement) {
+                    errorElement.textContent = 'Debes aceptar los términos y condiciones';
+                    errorElement.style.display = 'block';
+                }
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        // Mostrar error en campo
+        function showFieldError(inputElement, message) {
+            inputElement.classList.add('error');
+            const errorElement = inputElement.nextElementSibling;
+            if (errorElement && errorElement.classList.contains('error-message')) {
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+        }
+
+        // Configurar validación en tiempo real
+        function setupFormValidation() {
+            const form = document.getElementById('contact-form');
+            if (!form) return;
+
+            // Validar en tiempo real
+            form.querySelectorAll('input, select, textarea').forEach(input => {
+                input.addEventListener('blur', function () {
+                    if (this.hasAttribute('required') || this.value.trim() !== '') {
+                        validateField(this);
+                    }
+                });
+
+                input.addEventListener('input', function () {
+                    if (this.classList.contains('error')) {
+                        validateField(this);
+                    }
+                });
+            });
+        }
+
+        // Validar campo individual
+        function validateField(field) {
+            const value = field.value.trim();
+
+            switch (field.id) {
+                case 'contact-name':
+                    if (value.length < 2) {
+                        showFieldError(field, 'El nombre debe tener al menos 2 caracteres');
+                    } else {
+                        clearFieldError(field);
+                    }
+                    break;
+
+                case 'contact-email':
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(value)) {
+                        showFieldError(field, 'Correo electrónico inválido');
+                    } else {
+                        clearFieldError(field);
+                    }
+                    break;
+
+                case 'contact-phone':
+                    if (value !== '') {
+                        const phoneRegex = /^[0-9+\-\s\(\)]{10,}$/;
+                        if (!phoneRegex.test(value)) {
+                            showFieldError(field, 'Número de teléfono inválido');
+                        } else {
+                            clearFieldError(field);
+                        }
+                    } else {
+                        clearFieldError(field);
+                    }
+                    break;
+
+                case 'contact-message':
+                    if (value.length < 10) {
+                        showFieldError(field, 'El mensaje debe tener al menos 10 caracteres');
+                    } else {
+                        clearFieldError(field);
+                    }
+                    break;
+            }
+        }
+
+        // Limpiar error de campo
+        function clearFieldError(field) {
+            field.classList.remove('error');
+            const errorElement = field.nextElementSibling;
+            if (errorElement && errorElement.classList.contains('error-message')) {
+                errorElement.textContent = '';
+                errorElement.style.display = 'none';
+            }
+        }
+
+        // Mostrar estado del formulario
+        function showFormStatus(message, type) {
+            const formStatus = document.getElementById('form-status');
+            if (!formStatus) return;
+
+            formStatus.textContent = message;
+            formStatus.className = 'form-status';
+
+            switch (type) {
+                case 'success':
+                    formStatus.classList.add('status-success');
+                    break;
+                case 'error':
+                    formStatus.classList.add('status-error');
+                    break;
+                case 'warning':
+                    formStatus.classList.add('status-warning');
+                    break;
+            }
+
+            formStatus.style.display = 'block';
+        }
+
+        // Configurar Preguntas Frecuentes
+        function setupFAQ() {
+            const faqItems = document.querySelectorAll('.faq-item');
+
+            faqItems.forEach(item => {
+                item.addEventListener('click', function () {
+                    // Cerrar otros items
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== this && otherItem.classList.contains('active')) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+
+                    // Alternar item actual
+                    this.classList.toggle('active');
+                });
+            });
+        }
+
+        // Configurar contadores
+        function setupCounters() {
+            // Animar contadores
+            animateCounter('messages-sent', 128, 1500);
+            animateCounter('response-time', 2, 1500);
+            animateCounter('satisfaction-rate', 98, 1500, '%');
+        }
+
+        // Animar contador
+        function animateCounter(elementId, target, duration, suffix = '') {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+
+            let start = 0;
+            const increment = target / (duration / 16); // 60fps
+
+            function updateCounter() {
+                start += increment;
+                if (start < target) {
+                    element.textContent = Math.floor(start) + suffix;
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    element.textContent = target + suffix;
+                }
+            }
+
+            updateCounter();
+        }
+
+        // Incrementar mensajes enviados
+        function incrementMessagesSent() {
+            const counter = document.getElementById('messages-sent');
+            if (!counter) return;
+
+            let current = parseInt(counter.textContent) || 0;
+            current++;
+            counter.textContent = current;
+
+            // Guardar en localStorage
+            localStorage.setItem('messagesSent', current);
+        }
+
+        // Cargar estadísticas de contacto
+        function loadContactStats() {
+            // Cargar mensajes enviados
+            const savedMessages = localStorage.getItem('messagesSent');
+            if (savedMessages) {
+                const counter = document.getElementById('messages-sent');
+                if (counter) {
+                    counter.textContent = savedMessages;
+                }
+            }
+
+            // Cargar historial de contactos
+            const savedHistory = localStorage.getItem('contactHistory');
+            if (savedHistory) {
+                try {
+                    const history = JSON.parse(savedHistory);
+                    console.log('Historial de contactos cargado:', history.length, 'registros');
+                } catch (e) {
+                    console.error('Error al cargar historial:', e);
+                }
+            }
+        }
+
+        // Guardar en historial de contactos
+        function saveToContactHistory(data) {
+            let history = JSON.parse(localStorage.getItem('contactHistory')) || [];
+
+            const historyItem = {
+                id: Date.now(),
+                timestamp: new Date().toISOString(),
+                name: data.name,
+                email: data.email,
+                subject: data.subject,
+                priority: data.priority,
+                messagePreview: data.message.substring(0, 100) + '...'
+            };
+
+            history.unshift(historyItem);
+
+            // Mantener solo los últimos 50 registros
+            if (history.length > 50) {
+                history = history.slice(0, 50);
+            }
+
+            localStorage.setItem('contactHistory', JSON.stringify(history));
+        }
+
+        // Configurar controles del mapa
+        function setupMapControls() {
+            const loadMapBtn = document.getElementById('load-map');
+            const locateMeBtn = document.getElementById('locate-me');
+            const mapTypeBtns = document.querySelectorAll('[data-map-type]');
+
+            // Cargar mapa interactivo
+            if (loadMapBtn) {
+                loadMapBtn.addEventListener('click', loadInteractiveMap);
+            }
+
+            // Localizar usuario
+            if (locateMeBtn) {
+                locateMeBtn.addEventListener('click', locateUser);
+            }
+
+            // Cambiar tipo de mapa
+            mapTypeBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    // Remover clase active de todos los botones
+                    mapTypeBtns.forEach(b => b.classList.remove('active'));
+
+                    // Agregar clase active al botón clickeado
+                    this.classList.add('active');
+
+                    const mapType = this.dataset.mapType;
+                    changeMapType(mapType);
+                });
+            });
+        }
+
+        // Cargar mapa interactivo
+        function loadInteractiveMap() {
+            if (isMapLoaded) return;
+
+            const mapContainer = document.getElementById('interactive-map');
+            if (!mapContainer) return;
+
+            // Simular carga de mapa
+            mapContainer.innerHTML = `
+                <div class="flex flex-col items-center justify-center h-full">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mb-4"></div>
+                    <p class="text-neutral-600 dark:text-neutral-400">Cargando mapa interactivo...</p>
+                </div>
+            `;
+
+            // Simular retardo de carga
+            setTimeout(() => {
+                // Crear mapa simulado (en un proyecto real usarías Leaflet, Google Maps, etc.)
+                mapContainer.innerHTML = `
+                    <div id="simulated-map" style="width: 100%; height: 100%; position: relative;">
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+                             background: linear-gradient(135deg, #4f46e5, #7c3aed); 
+                             border-radius: 0.75rem; overflow: hidden;">
+                            
+                            <!-- Mapa simulado -->
+                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+                                 text-align: center; color: white; z-index: 2;">
+                                <div style="font-size: 3rem; margin-bottom: 1rem;">🗺️</div>
+                                <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem;">
+                                    Mapa Interactivo
+                                </h3>
+                                <p>Ubicación: Mountain View, CA</p>
+                                <p>Lat: 37.422, Lng: -122.084</p>
+                            </div>
+                            
+                            <!-- Calles simuladas -->
+                            <div style="position: absolute; top: 20%; left: 20%; width: 60%; height: 60%; 
+                                 border: 2px solid rgba(255,255,255,0.3); border-radius: 0.5rem;"></div>
+                            <div style="position: absolute; top: 40%; left: 30%; width: 40%; height: 20%; 
+                                 border: 2px solid rgba(255,255,255,0.3); border-radius: 0.5rem;"></div>
+                            
+                            <!-- Marcador de ubicación -->
+                            <div id="map-marker" style="position: absolute; top: 45%; left: 50%; 
+                                 transform: translate(-50%, -50%); z-index: 3;">
+                                <div style="background: #ef4444; width: 20px; height: 20px; border-radius: 50%; 
+                                     border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.3);"></div>
+                                <div style="position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+                                     background: white; color: #1f2937; padding: 4px 8px; border-radius: 4px;
+                                     font-size: 0.75rem; font-weight: bold; white-space: nowrap; margin-top: 4px;">
+                                    WebMaster HQ
+                                </div>
+                            </div>
+                            
+                            <!-- Controles del mapa simulados -->
+                            <div style="position: absolute; bottom: 20px; right: 20px; display: flex; gap: 8px;">
+                                <button onclick="zoomIn()" style="background: white; border: none; width: 40px; 
+                                        height: 40px; border-radius: 8px; font-size: 1.5rem; cursor: pointer; 
+                                        box-shadow: 0 2px 8px rgba(0,0,0,0.2);">+</button>
+                                <button onclick="zoomOut()" style="background: white; border: none; width: 40px; 
+                                        height: 40px; border-radius: 8px; font-size: 1.5rem; cursor: pointer; 
+                                        box-shadow: 0 2px 8px rgba(0,0,0,0.2);">-</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                isMapLoaded = true;
+
+                // Agregar funcionalidad de zoom
+                window.zoomIn = function () {
+                    const marker = document.getElementById('map-marker');
+                    if (marker) {
+                        const currentTransform = marker.style.transform || 'translate(-50%, -50%)';
+                        const currentScale = parseFloat(currentTransform.match(/scale\(([^)]+)\)/)?.[1]) || 1;
+                        marker.style.transform = `translate(-50%, -50%) scale(${currentScale * 1.2})`;
+                    }
+                };
+
+                window.zoomOut = function () {
+                    const marker = document.getElementById('map-marker');
+                    if (marker) {
+                        const currentTransform = marker.style.transform || 'translate(-50%, -50%)';
+                        const currentScale = parseFloat(currentTransform.match(/scale\(([^)]+)\)/)?.[1]) || 1;
+                        marker.style.transform = `translate(-50%, -50%) scale(${Math.max(0.5, currentScale * 0.8)})`;
+                    }
+                };
+
+            }, 1500);
+        }
+
+        // Cambiar tipo de mapa
+        function changeMapType(mapType) {
+            if (!isMapLoaded) return;
+
+            const simulatedMap = document.querySelector('#simulated-map > div');
+            if (!simulatedMap) return;
+
+            const colors = {
+                street: ['#4f46e5', '#7c3aed'],    // Índigo a violeta
+                satellite: ['#059669', '#10b981'],  // Verde
+                hybrid: ['#7c3aed', '#a855f7']      // Violeta a púrpura
+            };
+
+            const color = colors[mapType] || colors.street;
+            simulatedMap.style.background = `linear-gradient(135deg, ${color[0]}, ${color[1]})`;
+
+            // Mostrar notificación
+            showNotification(`Mapa cambiado a: ${getMapTypeName(mapType)}`, 'info');
+        }
+
+        // Obtener nombre del tipo de mapa
+        function getMapTypeName(mapType) {
+            const names = {
+                street: 'Vista de Calle',
+                satellite: 'Vista Satelital',
+                hybrid: 'Vista Híbrida'
+            };
+            return names[mapType] || 'Desconocido';
+        }
+
+        // Localizar usuario
+        function locateUser() {
+            if (!navigator.geolocation) {
+                showNotification('La geolocalización no está disponible en tu navegador', 'error');
+                return;
+            }
+
+            showNotification('Buscando tu ubicación...', 'info');
+
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+
+                    showNotification(`Ubicación encontrada: ${lat.toFixed(4)}, ${lng.toFixed(4)}`, 'success');
+
+                    // En un proyecto real, aquí moverías el mapa a la ubicación del usuario
+                    console.log('Ubicación del usuario:', lat, lng);
+
+                    // Mostrar marcador de usuario en el mapa simulado
+                    if (isMapLoaded) {
+                        showUserMarker(lat, lng);
+                    }
+                },
+                function (error) {
+                    let message = 'Error al obtener la ubicación: ';
+                    switch (error.code) {
+                        case error.PERMISSION_DENIED:
+                            message += 'Permiso denegado';
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            message += 'Ubicación no disponible';
+                            break;
+                        case error.TIMEOUT:
+                            message += 'Tiempo de espera agotado';
+                            break;
+                        default:
+                            message += 'Error desconocido';
+                    }
+                    showNotification(message, 'error');
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 5000,
+                    maximumAge: 0
+                }
+            );
+        }
+
+        // Mostrar marcador de usuario en el mapa
+        function showUserMarker(lat, lng) {
+            const simulatedMap = document.querySelector('#simulated-map > div');
+            if (!simulatedMap) return;
+
+            // Crear marcador de usuario
+            if (userMarker) {
+                userMarker.remove();
+            }
+
+            userMarker = document.createElement('div');
+            userMarker.innerHTML = `
+                <div style="position: absolute; top: 40%; left: 60%; transform: translate(-50%, -50%); z-index: 4;">
+                    <div style="background: #3b82f6; width: 16px; height: 16px; border-radius: 50%; 
+                         border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.3);"></div>
+                    <div style="position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+                         background: white; color: #1f2937; padding: 3px 6px; border-radius: 3px;
+                         font-size: 0.7rem; font-weight: bold; white-space: nowrap; margin-top: 3px;">
+                        Tú
+                    </div>
+                </div>
+            `;
+
+            simulatedMap.appendChild(userMarker);
+        }
+
+        // Mostrar términos y condiciones
+        function showTermsModal() {
+            const modalContent = `
+                <div style="max-width: 500px; padding: 2rem; background: white; border-radius: 1rem;">
+                    <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem; color: #1f2937;">
+                        Términos y Condiciones
+                    </h2>
+                    <div style="max-height: 400px; overflow-y: auto; color: #4b5563;">
+                        <p style="margin-bottom: 1rem;">
+                            Al utilizar nuestro formulario de contacto, aceptas los siguientes términos:
+                        </p>
+                        <ol style="margin-left: 1.5rem; margin-bottom: 1rem;">
+                            <li style="margin-bottom: 0.5rem;">
+                                La información proporcionada será utilizada únicamente para responder tu consulta.
+                            </li>
+                            <li style="margin-bottom: 0.5rem;">
+                                Nos comprometemos a proteger tu privacidad y no compartiremos tus datos con terceros.
+                            </li>
+                            <li style="margin-bottom: 0.5rem;">
+                                Te contactaremos en un plazo máximo de 48 horas hábiles.
+                            </li>
+                            <li>
+                                Puedes solicitar la eliminación de tus datos en cualquier momento.
+                            </li>
+                        </ol>
+                        <p>
+                            Para más información, consulta nuestra política de privacidad completa.
+                        </p>
+                    </div>
+                    <button onclick="closeModal()" style="margin-top: 1.5rem; padding: 0.75rem 1.5rem; 
+                            background: #6A00F4; color: white; border: none; border-radius: 0.5rem; 
+                            cursor: pointer; font-weight: 600;">
+                        Entendido
+                    </button>
+                </div>
+            `;
+
+            showModal(modalContent);
+        }
+
+        // Mostrar política de privacidad
+        function showPrivacyModal() {
+            const modalContent = `
+                <div style="max-width: 500px; padding: 2rem; background: white; border-radius: 1rem;">
+                    <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem; color: #1f2937;">
+                        Política de Privacidad
+                    </h2>
+                    <div style="max-height: 400px; overflow-y: auto; color: #4b5563;">
+                        <p style="margin-bottom: 1rem;">
+                            En WebMaster, nos comprometemos a proteger tu privacidad:
+                        </p>
+                        <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+                            <li style="margin-bottom: 0.5rem;">
+                                <strong>Recopilación de datos:</strong> Solo recopilamos la información necesaria para responder tu consulta.
+                            </li>
+                            <li style="margin-bottom: 0.5rem;">
+                                <strong>Uso de datos:</strong> Tu información no será vendida ni compartida con terceros.
+                            </li>
+                            <li style="margin-bottom: 0.5rem;">
+                                <strong>Almacenamiento seguro:</strong> Utilizamos encriptación SSL para proteger tus datos.
+                            </li>
+                            <li style="margin-bottom: 0.5rem;">
+                                <strong>Tus derechos:</strong> Puedes solicitar acceso, corrección o eliminación de tus datos.
+                            </li>
+                            <li>
+                                <strong>Cookies:</strong> Utilizamos cookies esenciales para el funcionamiento del sitio.
+                            </li>
+                        </ul>
+                        <p>
+                            Para ejercer tus derechos o hacer preguntas sobre nuestra política de privacidad, 
+                            contáctanos a través de este mismo formulario.
+                        </p>
+                    </div>
+                    <button onclick="closeModal()" style="margin-top: 1.5rem; padding: 0.75rem 1.5rem; 
+                            background: #6A00F4; color: white; border: none; border-radius: 0.5rem; 
+                            cursor: pointer; font-weight: 600;">
+                        Entendido
+                    </button>
+                </div>
+            `;
+
+            showModal(modalContent);
+        }
+
+        // Mostrar modal
+        function showModal(content) {
+            // Eliminar modal existente
+            const existingModal = document.getElementById('custom-modal');
+            if (existingModal) existingModal.remove();
+
+            // Crear modal
+            const modal = document.createElement('div');
+            modal.id = 'custom-modal';
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 9999;
+                padding: 1rem;
+            `;
+
+            modal.innerHTML = content;
+            document.body.appendChild(modal);
+
+            // Agregar función para cerrar
+            window.closeModal = function () {
+                modal.remove();
+            };
+
+            // Cerrar al hacer clic fuera del contenido
+            modal.addEventListener('click', function (e) {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+        }
+
+        // Mostrar notificación
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                color: white;
+                font-weight: 600;
+                z-index: 1000;
+                animation: slideIn 0.3s ease-out;
+            `;
+
+            if (type === 'success') {
+                notification.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+            } else if (type === 'error') {
+                notification.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+            } else {
+                notification.style.background = 'linear-gradient(135deg, #6A00F4, #8900F2)';
+            }
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Inicializar contador de caracteres
+        const messageTextarea = document.getElementById('contact-message');
+        const charCount = document.getElementById('message-char-count');
+        if (messageTextarea && charCount) {
+            charCount.textContent = messageTextarea.value.length;
+        }
+    </script>
+</body>
+
+</html>

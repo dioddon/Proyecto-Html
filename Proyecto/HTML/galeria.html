@@ -1,0 +1,1578 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería Interactiva | Proyecto Web Interactivo</title>
+
+    <!-- Fuente Google: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="../CSS/estilos.css">
+    <script src="../JS/tema.js" defer></script>
+
+    <style>
+        /* Estilos específicos para galería.html */
+        .gallery-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .gallery-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1.5rem;
+            border-radius: 2rem;
+            border: 2px solid #6A00F4;
+            background: transparent;
+            color: #6A00F4;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dark .filter-btn {
+            border-color: #A100F2;
+            color: #A100F2;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #6A00F4;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(106, 0, 244, 0.2);
+        }
+
+        .dark .filter-btn:hover,
+        .dark .filter-btn.active {
+            background: #A100F2;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 1rem;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            aspect-ratio: 4/3;
+            background: #f8fafc;
+        }
+
+        .dark .gallery-item {
+            background: #1e293b;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: white;
+            padding: 1.5rem;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
+        }
+
+        .gallery-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .gallery-description {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        /* Estilos del carrusel - CORREGIDO */
+        .carousel-section {
+            margin: 4rem 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, #f1f5f9, white);
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .dark .carousel-section {
+            background: linear-gradient(135deg, #334155, #1e293b);
+        }
+
+        .carousel-container {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 1rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            height: 500px;
+            /* Altura fija para el contenedor */
+        }
+
+        /* Clases CSS para el carrusel - CORREGIDAS */
+        .carousel-items {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 100%;
+            height: 100%;
+            /* Asegura que ocupe toda la altura */
+        }
+
+        .carousel-item {
+            min-width: 100%;
+            flex-shrink: 0;
+            position: relative;
+            height: 100%;
+            /* Ocupa toda la altura del contenedor */
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .carousel-item.active {
+            opacity: 1;
+        }
+
+        .carousel-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            /* Cambiado de cover a contain para ver imagen completa */
+            display: block;
+            background: #f8fafc;
+            /* Fondo para áreas vacías */
+        }
+
+        .dark .carousel-image {
+            background: #1e293b;
+        }
+
+        .carousel-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: white;
+            padding: 1.5rem;
+            z-index: 2;
+        }
+
+        .carousel-controls {
+            position: relative;
+            height: 0;
+        }
+
+        .carousel-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-button:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .carousel-button.prev {
+            left: 1rem;
+        }
+
+        .carousel-button.next {
+            right: 1rem;
+        }
+
+        /* Mejora los indicadores */
+        .carousel-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding: 1rem;
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            z-index: 5;
+        }
+
+        .carousel-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 4px;
+        }
+
+        .carousel-indicator.active {
+            background: #6A00F4;
+            transform: scale(1.2);
+            border-color: white;
+        }
+
+        .carousel-indicator:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: scale(1.1);
+        }
+
+        .dark .carousel-indicator {
+            background: #475569;
+        }
+
+        .dark .carousel-indicator.active {
+            background: #A100F2;
+        }
+
+        .carousel-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem 1.5rem;
+            border-radius: 2rem;
+            border: 2px solid #6A00F4;
+            background: #6A00F4;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: transparent;
+            color: #6A00F4;
+            transform: translateY(-2px);
+        }
+
+        .dark .action-btn {
+            border-color: #A100F2;
+            background: #A100F2;
+        }
+
+        .dark .action-btn:hover {
+            background: transparent;
+            color: #A100F2;
+        }
+
+        /* Estadísticas */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 3rem 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+            border-radius: 1rem;
+        }
+
+        .dark .stats-bar {
+            background: linear-gradient(135deg, #3730a3, #312e81);
+        }
+
+        .stat-item {
+            text-align: center;
+            color: #3730a3;
+        }
+
+        .dark .stat-item {
+            color: #c7d2fe;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+            margin-top: 0.5rem;
+        }
+
+        /* Sección de subida */
+        .upload-section {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: #f1f5f9;
+            border-radius: 1rem;
+            border: 2px dashed #cbd5e1;
+            text-align: center;
+        }
+
+        .dark .upload-section {
+            background: #334155;
+            border-color: #475569;
+        }
+
+        .upload-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: #6A00F4;
+            color: white;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .upload-btn:hover {
+            background: #5b00d6;
+            transform: translateY(-2px);
+        }
+
+        .dark .upload-btn {
+            background: #A100F2;
+        }
+
+        .dark .upload-btn:hover {
+            background: #8900d6;
+        }
+
+        .image-info {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-top: 1rem;
+        }
+
+        .dark .image-info {
+            color: #94a3b8;
+        }
+
+        /* Estado vacío */
+        .empty-state {
+            padding: 3rem;
+            background: #f8fafc;
+            border-radius: 1rem;
+            border: 2px dashed #cbd5e1;
+        }
+
+        .dark .empty-state {
+            background: #1e293b;
+            border-color: #475569;
+        }
+
+        .empty-state-icon {
+            color: #6A00F4;
+        }
+
+        .dark .empty-state-icon {
+            color: #A100F2;
+        }
+
+        /* Utilidades */
+        .hidden {
+            display: none !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-4xl {
+            font-size: 2.25rem;
+            line-height: 2.5rem;
+        }
+
+        .text-2xl {
+            font-size: 1.5rem;
+            line-height: 2rem;
+        }
+
+        .text-xl {
+            font-size: 1.25rem;
+            line-height: 1.75rem;
+        }
+
+        .text-lg {
+            font-size: 1.125rem;
+            line-height: 1.75rem;
+        }
+
+        .text-sm {
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+        }
+
+        .text-xs {
+            font-size: 0.75rem;
+            line-height: 1rem;
+        }
+
+        .font-bold {
+            font-weight: 700;
+        }
+
+        .font-semibold {
+            font-weight: 600;
+        }
+
+        .font-normal {
+            font-weight: 400;
+        }
+
+        .mb-2 {
+            margin-bottom: 0.5rem;
+        }
+
+        .mb-4 {
+            margin-bottom: 1rem;
+        }
+
+        .mb-6 {
+            margin-bottom: 1.5rem;
+        }
+
+        .mb-8 {
+            margin-bottom: 2rem;
+        }
+
+        .mb-12 {
+            margin-bottom: 3rem;
+        }
+
+        .mt-2 {
+            margin-top: 0.5rem;
+        }
+
+        .mt-3 {
+            margin-top: 0.75rem;
+        }
+
+        .mt-4 {
+            margin-top: 1rem;
+        }
+
+        .mt-8 {
+            margin-top: 2rem;
+        }
+
+        .mt-12 {
+            margin-top: 3rem;
+        }
+
+        .py-4 {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .py-8 {
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+        }
+
+        .py-12 {
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+        }
+
+        .px-2 {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+
+        .max-w-xs {
+            max-width: 20rem;
+        }
+
+        .max-w-2xl {
+            max-width: 42rem;
+        }
+
+        .max-w-3xl {
+            max-width: 48rem;
+        }
+
+        .mx-auto {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .w-full {
+            width: 100%;
+        }
+
+        .rounded-lg {
+            border-radius: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 1rem;
+            }
+
+            .carousel-section {
+                padding: 1rem;
+                margin: 2rem 0;
+            }
+
+            .carousel-container {
+                height: 400px;
+                /* Altura menor en móviles */
+            }
+
+            .carousel-caption {
+                padding: 1rem;
+            }
+
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .text-4xl {
+                font-size: 1.875rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .filter-btn {
+                width: 100%;
+                max-width: 200px;
+            }
+
+            .stats-bar {
+                grid-template-columns: 1fr;
+            }
+
+            .carousel-container {
+                height: 300px;
+                /* Altura aún menor en móviles pequeños */
+            }
+
+            .carousel-button {
+                width: 2.5rem;
+                height: 2.5rem;
+                font-size: 1.2rem;
+            }
+        }
+
+        #play-btn:disabled,
+        #pause-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        #play-btn:disabled:hover,
+        #pause-btn:disabled:hover {
+            background: #6A00F4;
+            color: white;
+        }
+
+        .dark #play-btn:disabled:hover,
+        .dark #pause-btn:disabled:hover {
+            background: #A100F2;
+            color: white;
+        }
+
+        /* Modal para imágenes */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            animation: zoomIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-neutral-50 text-neutral-900">
+
+    <!-- Navegación Principal -->
+    <header class="site-header">
+        <nav class="container">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo / Título -->
+                <a href="../Index.html" class="logo">
+                    <span class="logo-primary">Web</span><span class="logo-dark">Master</span>
+                </a>
+
+                <!-- Menú Desktop -->
+                <div class="nav-desktop">
+                    <a href="../Index.html" class="nav-link">Inicio</a>
+                    <a href="gestion.html" class="nav-link">Gestión</a>
+                    <a href="galeria.html" class="nav-link active">Galería</a>
+                    <a href="utilidades.html" class="nav-link">Utilidades</a>
+                    <a href="contacto.html" class="btn btn-primary">Contacto</a>
+
+                    <!-- Botón Dark Mode Desktop -->
+                    <button id="theme-toggle" class="btn btn-outline" data-theme-toggle aria-label="Cambiar tema">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                </div>
+
+                <!-- Botón Menú Móvil -->
+                <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Abrir menú">
+                    ☰
+                </button>
+            </div>
+
+            <!-- Menú Móvil (Oculto por defecto) -->
+            <div id="mobile-menu" class="mobile-menu hidden">
+                <a href="../Index.html" class="mobile-link">Inicio</a>
+                <a href="gestion.html" class="mobile-link">Gestión</a>
+                <a href="galeria.html" class="mobile-link active">Galería</a>
+                <a href="utilidades.html" class="mobile-link">Utilidades</a>
+                <a href="contacto.html" class="mobile-link">Contacto</a>
+                <button id="theme-toggle-mobile" class="btn btn-outline w-full mt-4" data-theme-toggle>
+                    Cambiar Tema <span class="theme-icon">🌓</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="container py-12">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-neutral-900 dark:text-white mb-4">
+                Galería Interactiva
+            </h1>
+            <p class="text-lg text-neutral-600 dark:text-neutral-400 max-w-3xl mx-auto">
+                Explora nuestra colección de imágenes con el carrusel interactivo y la galería filtrable.
+                Todas las funcionalidades están implementadas con JavaScript puro.
+            </p>
+        </div>
+
+        <!-- Carrusel Principal -->
+        <section class="carousel-section">
+            <h2 class="text-2xl font-bold text-center text-neutral-900 dark:text-white mb-6">
+                Carrusel Interactivo
+            </h2>
+
+            <div class="carousel-container" id="carousel-container">
+                <div class="carousel-items" id="carousel-items">
+                    <!-- Las imágenes se cargarán aquí dinámicamente -->
+                </div>
+
+                <div class="carousel-controls">
+                    <button class="carousel-button prev" aria-label="Imagen anterior">
+                        ‹
+                    </button>
+                    <button class="carousel-button next" aria-label="Siguiente imagen">
+                        ›
+                    </button>
+                </div>
+
+                <div class="carousel-indicators" id="carousel-indicators">
+                    <!-- Los indicadores se generarán dinámicamente -->
+                </div>
+            </div>
+
+            <div class="carousel-actions">
+                <button class="action-btn" id="pause-btn">
+                    ⏸️ Pausar
+                </button>
+                <button class="action-btn" id="play-btn">
+                    ▶️ Reproducir
+                </button>
+                <button class="action-btn" id="fullscreen-btn">
+                    ⛶ Pantalla Completa
+                </button>
+            </div>
+        </section>
+
+        <!-- Estadísticas -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-number" id="total-images">0</div>
+                <div class="stat-label">Imágenes Totales</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="carousel-index">1</div>
+                <div class="stat-label">Imagen Actual</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="filtered-count">0</div>
+                <div class="stat-label">Filtradas</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="views-count">0</div>
+                <div class="stat-label">Vistas Totales</div>
+            </div>
+        </div>
+
+        <!-- Controles de Galería -->
+        <div class="gallery-controls">
+            <button class="filter-btn active" data-filter="all">Todas</button>
+            <button class="filter-btn" data-filter="nature">Naturaleza</button>
+            <button class="filter-btn" data-filter="technology">Tecnología</button>
+            <button class="filter-btn" data-filter="art">Arte</button>
+            <button class="filter-btn" data-filter="abstract">Abstracto</button>
+            <button class="filter-btn" data-filter="favorites">Favoritos</button>
+        </div>
+
+        <!-- Galería Grid -->
+        <div class="gallery-grid" id="gallery-grid">
+            <!-- Las imágenes de la galería se cargarán dinámicamente -->
+        </div>
+
+        <!-- Sección de Subida -->
+        <section class="upload-section" id="upload-section">
+            <h3 class="text-xl font-bold text-neutral-900 dark:text-white mb-2">
+                ¿Tienes una imagen interesante?
+            </h3>
+            <p class="text-neutral-600 dark:text-neutral-400">
+                Sube tu propia imagen para agregarla a la galería (solo demostración).
+            </p>
+
+            <input type="file" id="image-upload" accept="image/*" class="hidden">
+            <label for="image-upload" class="upload-btn">
+                📤 Subir Imagen
+            </label>
+
+            <div class="image-info">
+                Formatos soportados: JPG, PNG, GIF • Máximo: 5MB
+            </div>
+
+            <div id="upload-preview" class="hidden mt-4">
+                <img id="preview-image" class="max-w-xs mx-auto rounded-lg" alt="Vista previa">
+                <button id="confirm-upload" class="btn btn-primary mt-4">
+                    ✅ Confirmar Subida
+                </button>
+            </div>
+        </section>
+
+        <!-- Galería de Favoritos -->
+        <section class="mt-12">
+            <h2 class="text-2xl font-bold text-neutral-900 dark:text-white mb-6">
+                Mis Favoritos
+                <span class="text-sm font-normal text-neutral-500 dark:text-neutral-400">
+                    (Haz clic en ❤️ para agregar a favoritos)
+                </span>
+            </h2>
+            <div class="gallery-grid" id="favorites-grid">
+                <!-- Las imágenes favoritas se mostrarán aquí -->
+            </div>
+            <div id="no-favorites" class="empty-state text-center py-8">
+                <div class="empty-state-icon text-4xl mb-4">❤️</div>
+                <p class="text-neutral-600 dark:text-neutral-400">
+                    Aún no tienes imágenes favoritas. Haz clic en el corazón de cualquier imagen para agregarla aquí.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="text-xl font-bold text-primary-600 dark:text-primary-500">WebMaster</span>
+                    <p class="text-sm text-neutral-500 mt-2">Desarrollo Web - Clase 2025</p>
+                </div>
+            </div>
+            <div class="footer-copyright">
+                &copy; 2025 Proyecto Web. Todos los derechos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Personalizado -->
+    <script src="../JS/script.js"></script>
+
+    <!-- Script específico para galería -->
+    <script>
+        // ===== CARRUSEL SIMPLIFICADO Y FUNCIONAL =====
+        let carouselCurrentIndex = 0;
+        let carouselAutoPlayInterval = null;
+        let isCarouselPlaying = true;
+
+        // Datos de imágenes para el carrusel
+        const carouselData = [
+            {
+                src: '../Imgs/fool.jpeg',
+                title: 'El tonto',
+                description: 'Paisaje natural con las primeras luces del día...',
+                category: '0'
+            },
+            {
+                src: '../Imgs/magician.jpeg',
+                title: 'EL Mago',
+                description: 'Simboliza la conexión entre el mundo espiritual y el físico...',
+                category: 'I'
+            },
+            {
+                src: '../Imgs/highpriestess.jpeg',
+                title: 'La Sacerdotisa',
+                description: 'Segunda carta del tarot...',
+                category: 'II'
+            },
+            {
+                src: '../Imgs/empress.jpeg',
+                title: 'La Emperatriz',
+                description: 'Representa la energía divina femenina...',
+                category: 'III'
+            },
+            {
+                src: '../Imgs/emperor.jpeg',
+                title: 'El Emperador',
+                description: 'Simboliza la autoridad, la estructura y la estabilidad...',
+                category: 'IV'
+            }
+        ];
+
+        // Inicializar carrusel simplificado
+        function initSimpleCarousel() {
+            console.log('Inicializando carrusel simplificado...');
+
+            const carouselItems = document.getElementById('carousel-items');
+            const indicatorsContainer = document.getElementById('carousel-indicators');
+
+            if (!carouselItems || !indicatorsContainer) {
+                console.error('Elementos del carrusel no encontrados');
+                return;
+            }
+
+            // Limpiar contenedores
+            carouselItems.innerHTML = '';
+            indicatorsContainer.innerHTML = '';
+
+            // Crear slides
+            carouselData.forEach((image, index) => {
+                // Crear slide
+                const slide = document.createElement('div');
+                slide.className = index === 0 ? 'carousel-item active' : 'carousel-item';
+                slide.dataset.index = index;
+
+                slide.innerHTML = `
+                    <img src="${image.src}" 
+                         alt="${image.title}" 
+                         class="carousel-image"
+                         onerror="this.src='https://placehold.co/800x450/6A00F4/ffffff?text=Imagen+${index + 1}'">
+                    <div class="carousel-caption">
+                        <h3 class="text-xl font-bold">${image.title}</h3>
+                        <p class="text-sm">${image.description.substring(0, 80)}...</p>
+                        <small class="text-xs opacity-80">${image.category}</small>
+                    </div>
+                `;
+
+                carouselItems.appendChild(slide);
+
+                // Crear indicador
+                const indicator = document.createElement('button');
+                indicator.className = index === 0 ? 'carousel-indicator active' : 'carousel-indicator';
+                indicator.dataset.index = index;
+                indicator.setAttribute('aria-label', `Ir a imagen ${index + 1}`);
+                indicator.addEventListener('click', () => {
+                    goToSlide(index);
+                });
+                indicatorsContainer.appendChild(indicator);
+            });
+
+            // Configurar controles
+            setupCarouselControls();
+
+            // Iniciar auto-play
+            startAutoPlay();
+
+            // Actualizar estadísticas
+            updateStats();
+
+            console.log('Carrusel simplificado inicializado correctamente');
+        }
+
+        // Función para mostrar slide específico
+        function goToSlide(index) {
+            const items = document.querySelectorAll('.carousel-item');
+            const indicators = document.querySelectorAll('.carousel-indicator');
+            const carouselItems = document.getElementById('carousel-items');
+
+            if (items.length === 0) return;
+
+            // Validar índice
+            if (index < 0) index = items.length - 1;
+            if (index >= items.length) index = 0;
+
+            // Guardar índice anterior
+            const prevIndex = carouselCurrentIndex;
+            carouselCurrentIndex = index;
+
+            console.log(`Cambiando de slide ${prevIndex + 1} a ${carouselCurrentIndex + 1}`);
+
+            // Ocultar slide anterior
+            items[prevIndex].classList.remove('active');
+            if (indicators[prevIndex]) {
+                indicators[prevIndex].classList.remove('active');
+            }
+
+            // Mostrar nueva slide
+            items[carouselCurrentIndex].classList.add('active');
+            if (indicators[carouselCurrentIndex]) {
+                indicators[carouselCurrentIndex].classList.add('active');
+            }
+
+            // Mover carrusel
+            if (carouselItems) {
+                carouselItems.style.transform = `translateX(-${carouselCurrentIndex * 100}%)`;
+            }
+
+            // Actualizar estadísticas
+            updateStats();
+        }
+
+        // Siguiente slide
+        function nextSlide() {
+            const items = document.querySelectorAll('.carousel-item');
+            if (items.length === 0) return;
+
+            const nextIndex = (carouselCurrentIndex + 1) % items.length;
+            goToSlide(nextIndex);
+        }
+
+        // Slide anterior
+        function prevSlide() {
+            const items = document.querySelectorAll('.carousel-item');
+            if (items.length === 0) return;
+
+            const prevIndex = (carouselCurrentIndex - 1 + items.length) % items.length;
+            goToSlide(prevIndex);
+        }
+
+        // Iniciar auto-play
+        function startAutoPlay() {
+            if (carouselAutoPlayInterval) clearInterval(carouselAutoPlayInterval);
+
+            isCarouselPlaying = true;
+            carouselAutoPlayInterval = setInterval(() => {
+                nextSlide();
+            }, 4000); // 4 segundos
+
+            // Actualizar botones
+            const pauseBtn = document.getElementById('pause-btn');
+            const playBtn = document.getElementById('play-btn');
+
+            if (pauseBtn) {
+                pauseBtn.disabled = false;
+                pauseBtn.innerHTML = '⏸️ Pausar';
+            }
+            if (playBtn) {
+                playBtn.disabled = true;
+                playBtn.innerHTML = '▶️ Reproduciendo';
+            }
+        }
+
+        // Detener auto-play
+        function stopAutoPlay() {
+            if (carouselAutoPlayInterval) {
+                clearInterval(carouselAutoPlayInterval);
+                carouselAutoPlayInterval = null;
+            }
+
+            isCarouselPlaying = false;
+
+            // Actualizar botones
+            const pauseBtn = document.getElementById('pause-btn');
+            const playBtn = document.getElementById('play-btn');
+
+            if (pauseBtn) {
+                pauseBtn.disabled = true;
+                pauseBtn.innerHTML = '⏸️ Pausado';
+            }
+            if (playBtn) {
+                playBtn.disabled = false;
+                playBtn.innerHTML = '▶️ Reproducir';
+            }
+        }
+
+        // Configurar controles
+        function setupCarouselControls() {
+            // Botones de navegación
+            const prevBtn = document.querySelector('.carousel-button.prev');
+            const nextBtn = document.querySelector('.carousel-button.next');
+            const pauseBtn = document.getElementById('pause-btn');
+            const playBtn = document.getElementById('play-btn');
+            const fullscreenBtn = document.getElementById('fullscreen-btn');
+
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => {
+                    stopAutoPlay();
+                    prevSlide();
+                    setTimeout(startAutoPlay, 5000);
+                });
+            }
+
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => {
+                    stopAutoPlay();
+                    nextSlide();
+                    setTimeout(startAutoPlay, 5000);
+                });
+            }
+
+            if (pauseBtn) {
+                pauseBtn.addEventListener('click', stopAutoPlay);
+            }
+
+            if (playBtn) {
+                playBtn.addEventListener('click', startAutoPlay);
+            }
+
+            if (fullscreenBtn) {
+                fullscreenBtn.addEventListener('click', toggleFullscreen);
+            }
+
+            // Pausar al pasar el mouse
+            const carousel = document.getElementById('carousel-container');
+            if (carousel) {
+                carousel.addEventListener('mouseenter', stopAutoPlay);
+                carousel.addEventListener('mouseleave', () => {
+                    if (isCarouselPlaying) {
+                        startAutoPlay();
+                    }
+                });
+            }
+
+            // Navegación con teclado
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') prevSlide();
+                if (e.key === 'ArrowRight') nextSlide();
+                if (e.key === ' ') {
+                    e.preventDefault();
+                    if (isCarouselPlaying) {
+                        stopAutoPlay();
+                    } else {
+                        startAutoPlay();
+                    }
+                }
+            });
+        }
+
+        // Pantalla completa
+        function toggleFullscreen() {
+            const carousel = document.getElementById('carousel-container');
+            if (!carousel) return;
+
+            if (!document.fullscreenElement) {
+                if (carousel.requestFullscreen) {
+                    carousel.requestFullscreen();
+                } else if (carousel.webkitRequestFullscreen) {
+                    carousel.webkitRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                }
+            }
+        }
+
+        // Actualizar estadísticas
+        function updateStats() {
+            const totalImagesEl = document.getElementById('total-images');
+            const carouselIndexEl = document.getElementById('carousel-index');
+
+            if (totalImagesEl) {
+                totalImagesEl.textContent = carouselData.length;
+            }
+
+            if (carouselIndexEl) {
+                carouselIndexEl.textContent = carouselCurrentIndex + 1;
+            }
+        }
+
+        // ===== GALERÍA SIMPLIFICADA =====
+        const galleryData = [
+            {
+                id: 1,
+                src: '../Imgs/fool.jpeg',
+                title: 'El tonto',
+                description: 'Paisaje natural con las primeras luces del día...',
+                category: 'nature',
+                favorite: false
+            },
+            {
+                id: 2,
+                src: '../Imgs/magician.jpeg',
+                title: 'EL Mago',
+                description: 'Simboliza la conexión entre el mundo espiritual y el físico...',
+                category: 'art',
+                favorite: true
+            },
+            {
+                id: 3,
+                src: '../Imgs/highpriestess.jpeg',
+                title: 'La Sacerdotisa',
+                description: 'Segunda carta del tarot...',
+                category: 'abstract',
+                favorite: false
+            },
+            {
+                id: 4,
+                src: '../Imgs/empress.jpeg',
+                title: 'La Emperatriz',
+                description: 'Representa la energía divina femenina...',
+                category: 'art',
+                favorite: false
+            },
+            {
+                id: 5,
+                src: '../Imgs/emperor.jpeg',
+                title: 'El Emperador',
+                description: 'Simboliza la autoridad, la estructura y la estabilidad...',
+                category: 'abstract',
+                favorite: true
+            },
+            {
+                id: 6,
+                src: '../Imgs/hierophant.jpeg',
+                title: 'El Hierofante',
+                description: 'Representa la espiritualidad, la tradición...',
+                category: 'nature',
+                favorite: false
+            },
+            {
+                id: 7,
+                src: '../Imgs/lovers.jpeg',
+                title: 'Los Amantes',
+                description: 'Simboliza la elección, las relaciones...',
+                category: 'art',
+                favorite: false
+            },
+            {
+                id: 8,
+                src: '../Imgs/chariot.jpeg',
+                title: 'El Carro',
+                description: 'Simboliza el éxito, la victoria...',
+                category: 'abstract',
+                favorite: true
+            },
+            {
+                id: 9,
+                src: '../Imgs/strenght.jpeg',
+                title: 'La Fuerza',
+                description: 'Representa la fortaleza interior...',
+                category: 'nature',
+                favorite: false
+            }
+        ];
+
+        // Cargar galería
+        function loadGallery(filter = 'all') {
+            const galleryGrid = document.getElementById('gallery-grid');
+            if (!galleryGrid) return;
+
+            galleryGrid.innerHTML = '';
+
+            // Filtrar imágenes
+            let filteredImages = galleryData;
+            if (filter !== 'all') {
+                if (filter === 'favorites') {
+                    filteredImages = galleryData.filter(img => img.favorite);
+                } else {
+                    filteredImages = galleryData.filter(img => img.category === filter);
+                }
+            }
+
+            // Crear elementos
+            filteredImages.forEach(image => {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                item.dataset.id = image.id;
+
+                item.innerHTML = `
+                    <img src="${image.src}" 
+                         alt="${image.title}"
+                         onerror="this.src='https://placehold.co/300x200/6A00F4/ffffff?text=${image.title}'">
+                    <div class="gallery-overlay">
+                        <h3 class="gallery-title">${image.title}</h3>
+                        <p class="gallery-description">${image.description.substring(0, 60)}...</p>
+                        <div class="flex justify-between items-center mt-2">
+                            <span class="text-xs bg-white/20 px-2 py-1 rounded">${image.category}</span>
+                            <button class="favorite-btn text-xl" data-id="${image.id}">
+                                ${image.favorite ? '❤️' : '🤍'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                // Agregar evento de click
+                item.addEventListener('click', (e) => {
+                    if (!e.target.classList.contains('favorite-btn')) {
+                        openImageModal(image);
+                    }
+                });
+
+                galleryGrid.appendChild(item);
+            });
+
+            // Actualizar contador
+            const filteredCount = document.getElementById('filtered-count');
+            if (filteredCount) {
+                filteredCount.textContent = filteredImages.length;
+            }
+
+            // Actualizar botones de filtro
+            updateFilterButtons(filter);
+        }
+
+        // Cargar favoritos
+        function loadFavorites() {
+            const favoritesGrid = document.getElementById('favorites-grid');
+            const noFavorites = document.getElementById('no-favorites');
+
+            if (!favoritesGrid || !noFavorites) return;
+
+            const favoriteImages = galleryData.filter(img => img.favorite);
+
+            if (favoriteImages.length === 0) {
+                favoritesGrid.classList.add('hidden');
+                noFavorites.classList.remove('hidden');
+            } else {
+                favoritesGrid.classList.remove('hidden');
+                noFavorites.classList.add('hidden');
+
+                favoritesGrid.innerHTML = '';
+
+                favoriteImages.forEach(image => {
+                    const item = document.createElement('div');
+                    item.className = 'gallery-item';
+
+                    item.innerHTML = `
+                        <img src="${image.src}" 
+                             alt="${image.title}"
+                             onerror="this.src='https://placehold.co/300x200/6A00F4/ffffff?text=${image.title}'">
+                        <div class="gallery-overlay">
+                            <h3 class="gallery-title">${image.title}</h3>
+                            <p class="gallery-description">${image.description.substring(0, 60)}...</p>
+                            <button class="remove-favorite-btn mt-2 text-sm" data-id="${image.id}">
+                                ❌ Remover de favoritos
+                            </button>
+                        </div>
+                    `;
+
+                    favoritesGrid.appendChild(item);
+                });
+            }
+        }
+
+        // Abrir modal de imagen
+        function openImageModal(image) {
+            // Crear modal si no existe
+            let modal = document.getElementById('image-modal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'image-modal';
+                modal.className = 'modal';
+                document.body.appendChild(modal);
+
+                modal.innerHTML = `
+                    <div class="modal-content">
+                        <button id="close-modal" style="
+                            position: absolute;
+                            top: 20px;
+                            right: 20px;
+                            background: rgba(255,255,255,0.2);
+                            color: white;
+                            border: none;
+                            border-radius: 50%;
+                            width: 40px;
+                            height: 40px;
+                            font-size: 24px;
+                            cursor: pointer;
+                            z-index: 1001;">
+                            ×
+                        </button>
+                        <img style="max-width: 100%; max-height: 70vh; object-fit: contain;">
+                        <div style="color: white; text-align: center; padding: 20px;">
+                            <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 10px;"></h3>
+                            <p style="opacity: 0.9;"></p>
+                        </div>
+                    </div>
+                `;
+
+                // Cerrar modal
+                document.getElementById('close-modal').addEventListener('click', () => {
+                    modal.style.display = 'none';
+                });
+
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+            }
+
+            // Actualizar contenido
+            const modalImg = modal.querySelector('img');
+            const modalTitle = modal.querySelector('h3');
+            const modalDesc = modal.querySelector('p');
+
+            modalImg.src = image.src;
+            modalImg.alt = image.title;
+            modalTitle.textContent = image.title;
+            modalDesc.textContent = image.description;
+
+            // Mostrar modal
+            modal.style.display = 'flex';
+
+            // Incrementar vistas
+            const viewsCount = document.getElementById('views-count');
+            if (viewsCount) {
+                viewsCount.textContent = parseInt(viewsCount.textContent) + 1;
+            }
+        }
+
+        // Configurar eventos
+        function setupEventListeners() {
+            // Filtros de galería
+            document.querySelectorAll('.filter-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const filter = this.dataset.filter;
+                    loadGallery(filter);
+                });
+            });
+
+            // Botones de favoritos (delegación de eventos)
+            document.addEventListener('click', function (e) {
+                if (e.target.classList.contains('favorite-btn') ||
+                    e.target.classList.contains('remove-favorite-btn')) {
+
+                    const imageId = parseInt(e.target.dataset.id);
+                    const image = galleryData.find(img => img.id === imageId);
+
+                    if (image) {
+                        image.favorite = !image.favorite;
+
+                        // Actualizar todos los botones de favorito para esta imagen
+                        document.querySelectorAll(`[data-id="${imageId}"]`).forEach(btn => {
+                            if (btn.classList.contains('favorite-btn')) {
+                                btn.innerHTML = image.favorite ? '❤️' : '🤍';
+                            }
+                        });
+
+                        // Recargar favoritos
+                        loadFavorites();
+
+                        // Si estamos en el filtro de favoritos, recargar galería
+                        const activeFilter = document.querySelector('.filter-btn.active');
+                        if (activeFilter && activeFilter.dataset.filter === 'favorites') {
+                            loadGallery('favorites');
+                        }
+
+                        // Mostrar notificación
+                        showNotification(
+                            image.favorite ? '❤️ Agregado a favoritos' : '💔 Removido de favoritos',
+                            'info'
+                        );
+                    }
+                }
+            });
+
+            // Subida de imágenes (demo)
+            const uploadInput = document.getElementById('image-upload');
+            const confirmUpload = document.getElementById('confirm-upload');
+            const uploadPreview = document.getElementById('upload-preview');
+
+            if (uploadInput) {
+                uploadInput.addEventListener('change', function (e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function (event) {
+                            const previewImage = document.getElementById('preview-image');
+                            if (previewImage) {
+                                previewImage.src = event.target.result;
+                                uploadPreview.classList.remove('hidden');
+                            }
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
+            if (confirmUpload) {
+                confirmUpload.addEventListener('click', function () {
+                    const previewImage = document.getElementById('preview-image');
+                    if (previewImage && previewImage.src) {
+                        // Simular subida
+                        showNotification('✅ Imagen subida exitosamente (demo)', 'success');
+
+                        // Resetear
+                        uploadInput.value = '';
+                        uploadPreview.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
+        // Actualizar botones de filtro
+        function updateFilterButtons(activeFilter) {
+            document.querySelectorAll('.filter-btn').forEach(button => {
+                if (button.dataset.filter === activeFilter) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            });
+        }
+
+        // Mostrar notificación
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 8px;
+                color: white;
+                font-weight: bold;
+                z-index: 1000;
+                animation: slideIn 0.3s ease-out;
+            `;
+
+            if (type === 'success') {
+                notification.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+            } else if (type === 'error') {
+                notification.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+            } else {
+                notification.style.background = 'linear-gradient(135deg, #6A00F4, #8900F2)';
+            }
+
+            document.body.appendChild(notification);
+
+            // Animación de salida
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // ===== INICIALIZACIÓN =====
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('Inicializando galería simplificada...');
+
+            // Inicializar carrusel
+            initSimpleCarousel();
+
+            // Inicializar galería
+            loadGallery('all');
+
+            // Inicializar favoritos
+            loadFavorites();
+
+            // Configurar eventos
+            setupEventListeners();
+
+            console.log('Galería simplificada inicializada correctamente');
+        });
+    </script>
+</body>
+
+</html>
